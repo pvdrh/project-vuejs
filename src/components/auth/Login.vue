@@ -20,10 +20,11 @@
               <input type="email" class="form__input" placeholder="Email" />
             </div>
             <div class="form__group">
-              <button type="submit" class="form__submit">
-                <span class="form__submit-text">Sign Up </span
-                ><i class="fa fa-long-arrow-right form__submit-icon"></i>
-              </button>
+               <button class="submitButton"
+                tabindex="0" type="button" @click="btnLogin()">
+          <span class="btnLabel">ĐĂNG NHẬP</span>
+          <span class="MuiTouchRipple-root"></span>
+        </button>
             </div>
             <div class="form__tos">
               <input type="checkbox" name="" id="tos" />
@@ -57,7 +58,7 @@ export default {
     register() {
       this.$router.push("/register");
     },
-    submitLogin() {
+    btnLogin() {
       this.$router.push("/admin");
     },
   },

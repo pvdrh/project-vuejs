@@ -34,7 +34,7 @@
             </div>
            <div class="returnRegisterWrap">
           <button class="registerBtn">
-            <span class="btnLabel" @click="login()">Đăng nhập</span>
+            <span class="btnLabel" @click="btnLogin()">Đăng nhập</span>
             <span class="MuiTouchRipple-root"></span>
           </button>
         </div>
@@ -54,7 +54,7 @@ export default {
     LoginLayout,
   },
   methods:{
-    login(){
+    btnLogin(){
       this.$router.push('/login')
     }
   }
