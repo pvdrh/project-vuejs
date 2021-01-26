@@ -6,22 +6,18 @@
 
 <script>
 export default {
-  name: "LoginLayout"
-}
+  name: "LoginLayout",
+};
 </script>
 
 <style scoped>
-.login{
+.login {
   height: 100vh;
   overflow: auto;
   background-position: center;
-  background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  
 }
-
 </style>

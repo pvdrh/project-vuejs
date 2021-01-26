@@ -1,5 +1,5 @@
 <template>
-  <Login/>
+  <Login />
 </template>
 
 <script>
@@ -8,11 +8,10 @@ import Login from "@/components/auth/Login";
 export default {
   name: "LoginView",
   components: {
-    Login
-  }
-}
+    Login,
+  },
+};
 </script>
 
 <style scoped>
-
 </style>
