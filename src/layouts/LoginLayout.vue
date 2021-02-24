@@ -1,23 +1,27 @@
 <template>
-  <div class="login">
-    <slot name="login"></slot>
+  <div class="hello">
+    <div class="container">
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "LoginLayout",
-};
+  name: "LoginLayout"
+}
 </script>
 
 <style scoped>
-.login {
+.container {
   height: 100vh;
   overflow: auto;
-  background-position: center;
+  background-position: 50%;
+  background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
+ background-image: url("../assets/images/bg-login.jpg");
 }
 </style>
