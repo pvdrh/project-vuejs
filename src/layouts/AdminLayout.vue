@@ -67,8 +67,8 @@ export default {
     background-repeat: no-repeat;
     .header {
       width: 100%;
-      height: 40px;
-      padding: 4px;
+      height: 60px;
+      padding: 5px;
       box-sizing: border-box;
       background: rgba(80, 80, 80, 0.5);
       display: flex;
@@ -78,22 +78,23 @@ export default {
         width: 90px;
         cursor: pointer;
         img {
-          width: 100%;
+          width: 140px;
+          height: 60px;
         }
       }
       .logo:hover {
         opacity: 1;
       }
       .avatar {
-        width: 32px;
-        height: 32px;
+        width: 45px;
+        height: 45px;
         position: absolute;
         right: 5px;
         cursor: pointer;
         .el-avatar {
-          width: 32px;
-          height: 32px;
-          line-height: 32px;
+          width: 45px;
+          height: 45px;
+          line-height: 45px;
         }
       }
       .user-setting {

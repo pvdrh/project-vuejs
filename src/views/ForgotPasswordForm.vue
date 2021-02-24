@@ -73,7 +73,7 @@ export default {
     width: 100%;
     height: 50px;
     background-color:green;
-    color: #ffffff;
+    color: #fff;
     border: 0;
     border-radius: 4px;
     margin-bottom: 50px;
