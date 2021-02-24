@@ -3,7 +3,7 @@
     <div class="container">
       <div class="header">
         <div class="logo" @click="goToHome()">
-          <img src="../assets/images/zent_logo_dark.png" alt="">
+          <img src="../assets/images/zent_logo_light.png" alt="">
         </div>
         <div class="avatar" @click="setting()">
           <el-avatar>
