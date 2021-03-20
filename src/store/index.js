@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import home from './modules/home'
+import home from './modules/home/index'
+import profile from './modules/profile/index'
+import auth from './modules/auth/index'
 
 Vue.use(Vuex)
 
@@ -12,9 +14,10 @@ const store = new Vuex.Store({
         // Khai báo mutations
     },
     modules: {
-        home
+        home,
+        profile,
+        auth
     }
-
 })
 
 export default store

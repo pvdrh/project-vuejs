@@ -1,0 +1,124 @@
+<template>
+  <div class="window-sidebar">
+    <div class="window-module u-clearfix">
+      <h3 class="mod-no-top-margin js-sidebar-add-heading">Thêm vào thẻ</h3>
+      <div class="u-clearfix">
+        <a class="button-link js-edit-labels" ref="label" @click="showControl($event,'label')" title="Nhãn">
+          <span class="icon-sm icon-label"><i class="el-icon-price-tag"></i></span>
+          <span class="js-sidebar-action-text">Nhãn</span>
+        </a>
+        <a class="button-link js-add-checklist-menu" title="Việc cần làm">
+          <span class="icon-sm icon-checklist"><i class="el-icon-folder-checked"></i></span>
+          <span class="js-sidebar-action-text">Việc cần làm</span>
+        </a>
+        <a class="button-link datetime-btn" href="#"
+           title="Thời gian hết hạn" style="position: relative">
+          <span class="icon-sm"> <i class="el-icon-alarm-clock"></i></span>
+          <span class="js-sidebar-action-text">Thời gian hết hạn</span>
+          <el-date-picker type="datetime">
+          </el-date-picker>
+        </a>
+        <a class="button-link btn-upload" title="Đính kèm">
+          <input id="uploadFile" class="uploadFile" type="file"/>
+          <span class="icon-sm icon-attachment"><i class="el-icon-paperclip"></i></span>
+          <span class="js-sidebar-action-text">Đính kèm</span>
+        </a>
+      </div>
+    </div>
+    <div class="window-module u-clearfix"><h3 class="mod-no-top-margin">Thao tác</h3>
+      <div class="u-clearfix">
+        <hr>
+        <a class="button-link js-delete-card remove-sidebar hide negate" @click="deleteCard" title="Xoá">
+          <span class="icon-sm icon-remove"><i class="el-icon-minus"></i></span>
+          <span class="js-sidebar-action-text">Xoá</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+export default {
+  name: "DialogSibar",
+  props: ['card'],
+  data() {
+    return {
+    }
+  },
+  methods: {
+    showControl(e, type) {
+      let rect = e.target.getBoundingClientRect();
+      let data = {
+        left: rect.left,
+        top: rect.top,
+        type: type,
+        id: this.card.id
+      };
+      this.$emit('showControl', data)
+    },
+    deleteCard(){
+      this.$emit('deleteCard',this.card.id)
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.window-sidebar {
+    float: right;
+    padding: 0 16px 8px 8px;
+    width: 168px;
+    overflow: hidden;
+    z-index: 10;
+    .window-module {
+        clear: both;
+        margin-bottom: 24px;
+        position: relative;
+        h3 {
+            margin-top: 0;
+            color: #5e6c84;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            line-height: 20px;
+            margin-bottom: -4px;
+        }
+        .u-clearfix {
+            .remove-sidebar {
+                background-color: #EF4444;
+                color: #fff!important;
+            }
+            .datetime-btn {
+                position: relative;
+                .el-date-editor {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    opacity: 0;
+                    input {
+                        cursor: pointer!important;
+                    }
+                }
+            }
+            .btn-upload {
+                cursor: pointer;
+                position: relative;
+                .uploadFile {
+                    position: absolute;
+                    opacity: 0;
+                    cursor: pointer;
+                }
+            }
+            .icon-sm {
+                height: 20px;
+                font-size: 16px;
+                line-height: 20px;
+                width: 20px;
+                margin: 0 6px 0 -6px;
+            }
+        }
+    }
+}
+</style>

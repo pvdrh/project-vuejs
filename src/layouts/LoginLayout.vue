@@ -1,8 +1,6 @@
 <template>
-  <div class="hello">
-    <div class="container">
-      <router-view/>
-    </div>
+  <div class="login">
+    <slot name="login"></slot>
   </div>
 </template>
 
@@ -13,15 +11,16 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.login{
   height: 100vh;
   overflow: auto;
-  background-position: 50%;
+  background-image: url("../assets/image/bg-login.jpg");
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
- background-image: url("../assets/images/bg-login.jpg");
 }
+
 </style>

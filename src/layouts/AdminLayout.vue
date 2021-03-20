@@ -1,149 +1,111 @@
 <template>
-  <div class="hello">
-    <div class="container">
-      <div class="header">
-        <div class="logo" @click="goToHome()">
-          <img src="../assets/images/zent_logo_light.png" alt="">
-        </div>
-        <div class="avatar" @click="setting()">
-          <el-avatar>
-            <img src="../assets/images/avatar.jpg" alt="">
-          </el-avatar>
-        </div>
-        <div class="user-setting" ref="usersetting">
-          <div class="user-top">
-            Cài Đặt
-          </div>
-          <div class="user-info">
-            <el-avatar>
-              <img src="../assets/images/avatar.jpg" alt="">
-            </el-avatar>
-            <div class="name-mail">
-              <div class="name">Phạm Văn Duy</div>
-              <span class="email">duypv@zent.vn</span>
+  <div class="container">
+    <el-container class="adminWrap">
+      <el-header class="adminHeader">
+        <div class="header-container">
+          <div class="header-left"></div>
+          <div class="header-center">
+            <div class="logo">
+              <img @click="gohome" src="../assets/image/zent_logo_dark.png" alt="logo">
             </div>
           </div>
-          <hr>
-          <div class="setting el-icon-s-custom" @click="settingAccount()">
-            <span style="padding-left:5px">Thông tin tài khoản</span>
-          </div>
-          <div class="logout el-icon-unlock" @click="logout()">
-            <span style="padding-left:5px">Đăng xuất</span>
+          <div class="header-right">
+            <el-dropdown>
+              <el-avatar src="https://genk.mediacdn.vn/k:thumb_w/640/2015/screen-shot-2015-07-30-at-2-31-57-pm-1438334096188/cau-chuyen-ve-nguoi-tao-ra-chu-ech-xanh-than-thanh.png"></el-avatar>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon="el-icon-user"> <router-link to="/profile">Thông Tin Tài Khoản</router-link></el-dropdown-item>
+                <el-dropdown-item icon="el-icon-setting">Đổi Mật Khẩu</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-unlock"><a @click="handleLogout">Đăng Xuất</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </div>
         </div>
-      </div>
-      <router-view/>
-    </div>
+      </el-header>
+      <el-main class="adminMain">
+        <slot name="main"></slot>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
+import {mapMutations} from "vuex";
+
+
 export default {
   name: "AdminLayout",
   methods: {
-    settingAccount() {
-      this.$router.push('profile')
-    },
-    goToHome() {
-      this.$router.push('home')
-    },
-    logout() {
-      this.$router.push('path/login')
-    },
-    setting() {
-      if (this.$refs.usersetting.style.visibility == 'visible')
-        this.$refs.usersetting.style.visibility = 'hidden'
-      else this.$refs.usersetting.style.visibility = 'visible'
-    }
+    ...mapMutations('auth', ['updateLoginStatus', 'updateAuthUser', 'updateToken']),
+    async handleLogout() {
+      localStorage.removeItem('access_token')
+        this.updateLoginStatus(false)
+        this.updateAuthUser({})
+        if (this.$router.currentRoute.name !== 'Login') {
+          await this.$router.push({ name: 'Login' })
+        }
+      },
+      gohome(){
+        this.$router.push({ name: 'Home' })
+      }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-  .container {
+<style scoped lang="scss">
+.container {
+  height: 100vh;
+  overflow: auto;
+  position: relative;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("../assets/image/bg.jpg");
+  .adminWrap {
     height: 100%;
-    background-image: url("../assets/images/bg.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    .header {
-      width: 100%;
-      height: 60px;
-      padding: 5px;
-      box-sizing: border-box;
-      background: rgba(80, 80, 80, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .logo {
-        width: 90px;
-        cursor: pointer;
-        img {
-          width: 140px;
-          height: 60px;
-        }
-      }
-      .logo:hover {
-        opacity: 1;
-      }
-      .avatar {
-        width: 45px;
-        height: 45px;
-        position: absolute;
-        right: 5px;
-        cursor: pointer;
-        .el-avatar {
-          width: 45px;
-          height: 45px;
-          line-height: 45px;
-        }
-      }
-      .user-setting {
-        position: absolute;
-        top: 45px;
-        right: 5px;
-        background: white;
-        visibility: hidden;
-        font-weight:600;
-        font-size: 16px !important;
-        width: 290px;
-        height: auto;
-        padding: 10px;
-        border-radius: 5px;
-        font-size: 14px;
-        .user-info {
-          justify-content: left;
-          display: flex;
-          padding: 15px 0;
-          height: 40px;
-          .name-mail {
-            padding: 2px 2px 2px 7px;
-            text-align: left;
-            height: 50px;
-            position: relative;
-            .name {
-              margin-top: 1px;
-              font-size: 14px;
-            }
-            span {
-              position: absolute;
-              top: 25px;
-              opacity: 0.5;
+    display: flex;
+    flex-direction: column;
+    .adminHeader {
+      min-height: 80px;
+      max-height: 80px;
+      overflow: hidden;
+      padding: 0;
+      .header-container {
+        background-color: rgba(0, 0, 0, 0.25);
+        box-sizing: border-box;
+        display: flex;
+        max-height: 50px;
+        overflow: hidden;
+        justify-content: space-between;
+        .header-center {
+          .logo {
+            img {
+              height: 50px;
+              width: 100px;
             }
           }
         }
-        .setting, .logout {
-          justify-content: left;
-          display: flex;
-          padding: 4px;
-          cursor: pointer;
-        }
-        .setting:hover {
-          background-color: #d4d7da;
-        }
-        .logout:hover {
-          background-color: #d4d7da;
+        .header-right {
+          .el-dropdown {
+            .el-avatar {
+              outline: none;
+              width: 36px;
+              height: 36px;
+              margin: 7px;
+            }
+          }
         }
       }
     }
+    .adminMain {
+      position: relative;
+      overflow-y: hidden;
+      outline: none;
+      padding: 0;
+      height: 100%;
+    }
   }
+}
 </style>
