@@ -192,30 +192,6 @@ export default {
         })
     },
 
-    //Checklist
-    addCheckList(data) {
-        return apiAxios({
-            method: 'post',
-            url: '/check-lists',
-            data: data
-        })
-    },
-
-    updateCheckListTitle(data, id) {
-        return apiAxios({
-            method: 'put',
-            url: '/check-lists/' + id,
-            data: data
-        })
-    },
-
-    deleteChecklist(id) {
-        return apiAxios({
-            method: 'delete',
-            url: '/check-lists/' + id,
-        })
-    },
-
     //file
     addFile(data, id) {
         return apiAxios({

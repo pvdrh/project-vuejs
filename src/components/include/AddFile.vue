@@ -1,6 +1,6 @@
 <template>
   <div class="attachment-thumbnail">
-    <img class="attachment-thumbnail-preview js-open-viewer" >
+    <img class="attachment-thumbnail-preview js-open-viewer" :src="'http://vuecourse.zent.edu.vn/storage/' + file.path" >
     <p  class="attachment-thumbnail-details js-open-viewer"><span
         class="attachment-thumbnail-name">{{ file.name }}</span><a
         class="attachment-thumbnail-details-title-action dark-hover js-attachment-action js-direct-link"
