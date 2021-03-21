@@ -33,8 +33,6 @@
                   <div class="edit-labels-no-color-section-color">
                     <DetailLabel class="label-item" :color="'default'" @activeLabel="activeLabel"/>
                   </div>
-                  <div class="edit-labels-no-color-section-text"><p class="u-bottom">Không có màu.</p>
-                    <p class="u-bottom quiet">Điều này sẽ không hiển thị trên đầu thẻ.</p></div>
                 </div>
                 <div class="u-clearfix"><input class="nch-button nch-button--primary wide js-submit"
                                                @click="addLabelToCard" type="submit"
@@ -106,7 +104,7 @@ import api from '../../api';
 import {mapMutations, mapState} from "vuex";
 
 export default {
-  name: "ModalSidebar",
+  name: "PickColor",
   props: ['offset', 'card', 'labels'],
   components: {
     DetailLabel

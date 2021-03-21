@@ -45,7 +45,7 @@
 import moment from 'moment'
 import api from '../../api'
 export default {
-  name: "DialogSibar",
+  name: "DialogSidebar",
   props: ['card'],
   data() {
     return {

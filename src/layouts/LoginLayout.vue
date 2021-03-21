@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="container">
     <slot name="login"></slot>
   </div>
 </template>
@@ -11,7 +11,8 @@ export default {
 </script>
 
 <style scoped>
-.login{
+.container{
+  background-image: url("../assets/image/bg-login.jpg"), linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
   height: 100vh;
   overflow: auto;
   background-position: center;
@@ -20,8 +21,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0093e9;
-  background-image: url("../assets/image/bg-login.jpg"), linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
 }
 
 </style>

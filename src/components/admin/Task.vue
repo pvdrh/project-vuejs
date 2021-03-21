@@ -48,7 +48,7 @@ export default {
       modalShow: false,
       dialogFormVisible: false,
       editDescriptionModal: false,
-      showControlModalSidebar: false,
+      showPickColor: false,
       offsetLabel: {},
       labels: [],
       isComplete: false,
@@ -100,8 +100,6 @@ export default {
       })
     },
     handleShowControl(data) {
-      // this.showControlModalSidebar = false;
-
       this.$emit('handleShowControl', data)
     },
     openControlLabel(e) {

@@ -1,19 +1,16 @@
 <template>
   <div class="pop-over is-shown" :style="{left: offset.left+'px', top: offset.top+'px'}" data-elevation="1">
     <div class="no-back">
-      <div class="pop-over-header js-pop-over-header"><span class="pop-over-header-title">Thao tác</span>
+      <div class="pop-over-header js-pop-over-header"><span class="pop-over-header-title el-icon-setting"> Tùy Chọn</span>
         <a href="#"
            class="pop-over-header-close-btn icon-sm icon-close" @click="closeAction"><i class="el-icon-close"></i></a>
       </div>
       <div>
-        <div class="pop-over-content js-pop-over-content u-fancy-scrollbar js-tab-parent" style="max-height: 475px;">
+        <div class="conten js-pop-over-content u-fancy-scrollbar js-tab-parent" style="max-height: 475px;">
           <div>
             <div>
               <ul class="pop-over-list">
-                <li><a class="js-add-card" href="#">Thêm thẻ...</a></li>
-              </ul>
-              <ul class="pop-over-list">
-                <li><a class="js-close-list remove-list" @click="deleteList" href="#">Xóa danh sách này!</a></li>
+                <li><a class="js-close-list remove-list el-icon-delete" @click="deleteList"> Xóa danh sách.</a></li>
               </ul>
             </div>
           </div>
@@ -33,9 +30,6 @@ export default {
     },
     closeAction(){
       this.$emit('closeAction')
-    },
-    addList(){
-      this.$emit('addList')
     }
   }
 }
@@ -44,12 +38,12 @@ export default {
 <style scoped lang="scss">
 .pop-over {
   z-index: 9999;
-  background: #fff;
+  background: white;
   border-radius: 3px;
   box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
   overflow: hidden;
   position: absolute;
-  width: 304px;
+  width: 180px;
 
   .no-back {
     .pop-over-header {
@@ -117,7 +111,7 @@ export default {
     }
 
     div {
-      .pop-over-content {
+      .conten {
         max-height: 368px;
         overflow-x: hidden;
         overflow-y: auto;
@@ -159,26 +153,26 @@ export default {
       }
 
       /* width */
-      .pop-over-content::-webkit-scrollbar {
+      .conten::-webkit-scrollbar {
         height: 8px;
         //width: 98%;
         width: 8px;
       }
 
       /* Track */
-      .pop-over-content::-webkit-scrollbar-track {
+      .conten::-webkit-scrollbar-track {
         border-radius: 7px;
         background-color: #4f4f5073;
       }
 
       /* Handle */
-      .pop-over-content::-webkit-scrollbar-thumb {
+      .conten::-webkit-scrollbar-thumb {
         background: #bcbcbe63;
         border-radius: 7px;
       }
 
       /* Handle on hover */
-      .pop-over-content::-webkit-scrollbar-thumb:hover {
+      .conten::-webkit-scrollbar-thumb:hover {
         background: #d3d3d87d;
       }
     }

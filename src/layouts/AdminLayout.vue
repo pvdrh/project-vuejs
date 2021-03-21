@@ -1,12 +1,12 @@
 <template>
-  <div class="admin">
-    <el-container class="adminWrap">
-      <el-header class="adminHeader">
+  <div class="container">
+    <el-container class="wrap">
+      <el-header class="header">
         <div class="header-container">
           <div class="header-left"></div>
           <div class="header-center">
             <div class="logo">
-              <img src="../assets/image/zent_logo_dark.png" alt="logo">
+              <img @click="goBack" src="../assets/image/zent_logo_dark.png">
             </div>
           </div>
           <div class="header-right">
@@ -26,7 +26,7 @@
           </div>
         </div>
       </el-header>
-      <el-main class="adminMain">
+      <el-main class="main">
         <slot name="main"></slot>
       </el-main>
     </el-container>
@@ -48,6 +48,9 @@ export default {
           await this.$router.push({ name: 'Login' })
         }
       },
+      goBack(){
+        this.$router.push({ name: 'Home' })
+      }
   },
   computed:{
     ...mapState('auth',[
@@ -58,8 +61,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.admin {
+.container {
   height: 100vh;
+  background-image: url("../assets/image/bg.jpg");
   overflow: auto;
   position: relative;
   background-position: center;
@@ -68,32 +72,32 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url("../assets/image/bg.jpg");
 
-  .adminWrap {
+  .wrap {
     height: 100%;
     display: flex;
     flex-direction: column;
 
-    .adminHeader {
-      min-height: 40px;
-      max-height: 40px;
-      overflow: hidden;
+    .header {
       padding: 0;
+      min-height: 80px;
+      max-height: 80px;
+      overflow: hidden;
 
       .header-container {
-        background-color: rgba(0, 0, 0, .32);
+        max-height: 50px;
+        background-color: rgba(0, 0, 0, .25);
         box-sizing: border-box;
         display: flex;
-        max-height: 40px;
         overflow: hidden;
-        padding: 4px;
         justify-content: space-between;
 
         .header-center {
           .logo {
             img {
-              width: 60px;
+              width: 110px;
+              height: 50px;
+              cursor: pointer;
             }
           }
         }
@@ -101,24 +105,21 @@ export default {
         .header-right {
           .el-dropdown {
             .el-avatar {
-              outline: none;
-              width: 30px;
-              height: 30px;
+              width: 36px;
+              height: 36px;
+              margin: 6px;
             }
           }
         }
       }
     }
 
-    .adminMain {
+    .main {
       position: relative;
-      overflow-y: hidden;
-      outline: none;
-      padding: 0;
       height: 100%;
+      overflow-y: hidden;
+      padding: 0;
     }
-
-
   }
 }
 </style>

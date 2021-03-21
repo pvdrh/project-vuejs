@@ -4,13 +4,14 @@
       <div class="adminMainContent">
         <div class="main-content">
           <div class="listTodo">
+
+            <!-- Xử lý kéo thả -->
             <draggable
                 class="dragArea"
                 :list="list"
                 item-key="id"
                 :animation="100"
-                :move="moveList"
-            >
+                :move="moveList">
               <List v-for="(item,index) in list" :id="item.id"
                     @closeControlModal="closeControlModal" :key="index"
                     @updateCardList="getDataList" @updateListTitle="handleUpdateList" @openActionList="openActionList"
@@ -29,7 +30,7 @@
           </div>
         </div>
       </div>
-      <ModalSidebar v-if="showControlModalSidebar" :card="card" :labels="labels" @closeLabelModal="closeControlModal"
+      <PickColor v-if="showPickColor" :card="card" :labels="labels" @closeLabelModal="closeControlModal"
                     :offset="offset" @reloadLabel="reloadLabel"/>
       <el-dialog v-if="dialogFormVisible" id="detailTodo" class="dialogTodo" :append-to-body="true" width="40%"
                  :show-close="false"
@@ -64,7 +65,7 @@
                     <h3 class="card-detail-item-header">Ngày hết hạn</h3>
                     <div class="card-detail-due-date-badge js-card-detail-due-date-badge is-clickable is-due-complete"
                          title="Thẻ này đã hoàn tất.">
-                      <el-checkbox v-model="isComplete" @change="changeStatusTodo"></el-checkbox>
+                      <el-checkbox v-model="isComplete" @change="changeStatus"></el-checkbox>
                       <div class="card-detail-badge-due-date-react-container">
                         <div class="card-deadline-badge">
                           <button class="deadline-badge datetime-btn"
@@ -173,7 +174,7 @@
                      class="checklist-list window-module js-checklist-list js-no-higher-edits ui-sortable">
                 </div>
               </div>
-              <DialogSibar @updateDetailCard="getDetailCard(cardDetail.id)" @showControl="handleShowControl"
+              <DialogSidebar @updateDetailCard="getDetailCard(cardDetail.id)" @showControl="handleShowControl"
                            @deleteCard="deleteCard" @changeDeadline="changeDeadline"
                            :card="cardDetail"/>
             </div>
@@ -196,8 +197,8 @@ import draggable from "vuedraggable";
 import {mapMutations, mapState} from 'vuex'
 import api from '../../api';
 import _ from "lodash";
-import ModalSidebar from "@/components/include/ModalSidebar";
-import DialogSibar from "@/components/include/DialogSibar";
+import PickColor from "@/components/include/PickColor";
+import DialogSidebar from "@/components/include/DialogSidebar";
 import moment from "moment";
 import Action from "@/components/include/Action";
 import File from "@/components/include/File";
@@ -209,7 +210,7 @@ export default {
     return {
       addList: false,
       data: [],
-      showControlModalSidebar: false,
+      showPickColor: false,
       showActionList: false,
       showActionFile: false,
       labels: [],
@@ -232,8 +233,8 @@ export default {
     List,
     draggable,
     NewList,
-    ModalSidebar,
-    DialogSibar,
+    PickColor,
+    DialogSidebar,
     Action,
     File,
     EditFile
@@ -319,12 +320,12 @@ export default {
         await this.getDatalabel()
       }
       if (_.isEmpty(this.offset)) {
-        this.showControlModalSidebar = true;
+        this.showPickColor = true;
       }
       if (!_.isEmpty(this.offset) && this.offset.type !== data.type) {
-        this.showControlModalSidebar = true;
+        this.showPickColor = true;
       } else if (!_.isEmpty(this.offset) && this.offset.type === data.type) {
-        this.showControlModalSidebar = !this.showControlModalSidebar
+        this.showPickColor = !this.showPickColor
       }
       this.offset = data
     },
@@ -334,7 +335,7 @@ export default {
       })
     },
     closeControlModal() {
-      this.showControlModalSidebar = false
+      this.showPickColor = false
     },
     async openDetailCard(id) {
       this.closeAll()
@@ -347,7 +348,7 @@ export default {
 
     },
     closeModal() {
-      this.showControlModalSidebar = false
+      this.showPickColor = false
       this.dialogFormVisible = false
     },
     deleteCard(data) {
@@ -377,14 +378,11 @@ export default {
       this.resetTime()
     },
     changeDeadlineModal() {
-      let data = {
+      let time = {
         deadline: moment(this.deadline).format('YYYY-MM-DD HH:mm:ss'),
         directory_id: this.card.directory_id
       }
-
-      console.log(data)
-
-      this.changeDeadline(data)
+      this.changeDeadline(time)
     },
     updateCardTitle(e) {
       e.target.blur()
@@ -395,28 +393,7 @@ export default {
         this.getDetailCard(this.card.id)
       })
     },
-
-    quickEditCardTitle(data) {
-      api.updateCard(data, data.id).then(() => {
-        this.getDetailCard(this.card.id)
-      })
-    },
-    updateCardDescription() {
-      let textarea = document.getElementById('descriptionCard')
-
-      textarea.blur();
-
-      let data = {
-        title: this.cardDetail.title,
-        description: this.description,
-      }
-      api.updateCard(data, this.card.id).then(() => {
-
-        this.getDetailCard(this.card.id)
-        this.editDescriptionModal = false
-      })
-    },
-    changeStatusTodo() {
+    changeStatus() {
       let data = {};
 
       if (this.isComplete) {
@@ -426,7 +403,7 @@ export default {
       }
 
       data.directory_id = this.cardDetail.directory_id
-      api.changeStatusTodo(data, this.cardDetail.id).then(() => {
+      api.changeStatus(data, this.cardDetail.id).then(() => {
         this.getDetailCard(this.cardDetail.id);
       })
     },
@@ -459,14 +436,14 @@ export default {
       this.loadDescription()
       this.loadDeadline()
       this.loadData()
-      this.checkComplate()
+      this.checkComplete()
       this.checkDeadline()
     },
     closeAll() {
       this.showActionList = false;
-      this.showControlModalSidebar = false
+      this.showPickColor = false
     },
-    checkComplate() {
+    checkComplete() {
       if (this.cardDetail.status == 0) {
         this.isComplete = false
       } else {
@@ -501,7 +478,7 @@ export default {
     this.loadDeadline();
     this.loadDescription();
     this.loadTitle()
-    this.checkComplate()
+    this.checkComplete()
     this.checkDeadline()
   },
   updated() {
@@ -511,7 +488,7 @@ export default {
     this.loadDeadline();
     this.loadDescription();
     this.loadTitle()
-    this.checkComplate()
+    this.checkComplete()
     this.checkDeadline()
   }
 }
