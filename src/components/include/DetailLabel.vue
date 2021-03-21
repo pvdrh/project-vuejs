@@ -68,6 +68,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/scss/card_color";
+
 .card-label {
   border-radius: 3px;
   cursor: pointer;
@@ -78,12 +80,13 @@ export default {
   position: relative;
   transition: padding 85ms, margin 85ms, box-shadow 85ms;
   width: 100%;
-  color: white;
+  color: #fff;
   display: block;
   max-width: 90%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
   span {
     height: 20px;
     font-size: 16px;
@@ -101,42 +104,8 @@ export default {
     top: 6px;
   }
 }
+
 .card-label:hover {
   opacity: 0.9;
-}
-
-//Màu của nhãn
-.card-label-yellow {
-  background-color: #FACC15 !important;
-}
-.card-label-orange {
-  background-color: #FB923C!important;
-}
-.card-label-black {
-  background-color:#34363b !important;
-}
-.card-label-red {
-  background-color: #F87171 !important;
-}
-.card-label-green {
-  background-color: #34D399 !important;
-}
-.card-label-purple {
-  background-color: #A78BFA !important;
-}
-.card-label-blue {
-  background-color: #60A5FA !important;
-}
-.card-label-sky {
-  background-color: #34d3ce !important;
-}
-.card-label-lime {
-  background-color: #51e87c !important;
-}
-.card-label-pink {
-  background-color: #F472B6 !important;
-}
-.card-label-default{
-  background-color: #9CA3AF;
 }
 </style>

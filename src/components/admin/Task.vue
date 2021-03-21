@@ -1,17 +1,35 @@
 <template>
   <div class="cardTodo">
-    <div @click.left="openDetailCard" class="detailTodo" >
-      <span class="btn-edit" @click="btnOpenEdit">
+    <div class="detailTodo" @click.left="openDetailCard" >
+      <span class="btn-edit">
         <i class="el-icon-edit"></i>
       </span>
       <div class="list-card-labels">
-        <span class="card-label label-default mod-card-front" @click="handleShowLable"
+        <span class="card-label card-label-default mod-card-front" @click="handleShowLable"
               :class="[{'labelShow' :labelShow}, 'card-label-'+label.color]" v-for="label in card.labels"
-              :key="label.id">
+              :key="label.id" title="LMS Thầy thiện">
           <span class="label-text" v-if="labelShow">{{ label.name }}</span>
         </span>
       </div>
       <p class="text-title">{{ card.title }}</p>
+      <div class="badges">
+        <span class="js-badges">
+          <div class="badge js-due-date-badge mod-due-date"
+               :class="[{'is-due-complete':isComplete},{'is-due-die': isDeadline===2},{'is-due-near': isDeadline===1}]"
+               title="This card is complete."
+               v-if="card.deadline!=null">
+            <span class="badge-icon icon-sm icon-clock badge-due-icon"> <i
+                class="el-icon-alarm-clock badge-due-icon"></i></span>
+            <span class="badge-icon icon-sm icon-checkbox-checked badge-due-checked" @click="changeStatusTodo">
+              <el-checkbox v-model="isComplete"
+                           @change="changeStatusTodo"></el-checkbox>
+            </span>
+            <span class="badge-text js-due-date-text">{{ formatStringDate(card.deadline) }}</span>
+          </div>
+        </span>
+        <span class="custom-field-front-badges js-custom-field-badges"><span></span></span>
+        <span class="js-plugin-badges"><span></span></span>
+      </div>
     </div>
   </div>
 </template>
@@ -19,7 +37,7 @@
 <script>
 import {mapMutations, mapState} from "vuex";
 import api from "@/api";
-
+import moment from "moment";
 
 export default {
   name: "Todo",
@@ -33,7 +51,10 @@ export default {
       showControlModalSidebar: false,
       offsetLabel: {},
       labels: [],
+      isComplete: false,
+      isDeadline: 0,
       cardTitle: '',
+      deadline: '',
       description: ''
     }
   },
@@ -45,20 +66,50 @@ export default {
       e.stopPropagation()
       this.showLable()
     },
+    changeStatusTodo() {
+      let data = {};
+
+      if (this.isComplete) {
+        data.status = 1;
+      } else {
+        data.status = 0
+      }
+
+      data.directory_id = this.card.directory_id
+      api.changeStatusTodo(data, this.card.id).then(() => {
+        this.getDetailCard();
+        this.$emit('updateData')
+      })
+    },
+    changeDeadline(data) {
+      api.changeStatusDeadline(data, this.card.id).then(() => {
+        this.getDetailCard();
+        this.$emit('updateData')
+      })
+
+      this.resetTime()
+    },
+    resetTime() {
+      this.isDeadline = 0;
+      this.isComplete = false;
+      this.deadline = ''
+    },
     getDetailCard() {
       api.getCard(this.card.id).then((response) => {
         this.updateCardDetail(response.data.data);
       })
     },
     handleShowControl(data) {
+      // this.showControlModalSidebar = false;
+
       this.$emit('handleShowControl', data)
     },
     openControlLabel(e) {
       let rect = e.target.getBoundingClientRect();
       let data = {
-        type: 'label',
         left: rect.left,
         top: rect.top,
+        type: 'label',
         id: this.card.id
       };
       this.$emit('handleShowControl', data)
@@ -69,28 +120,53 @@ export default {
     closeControlModal() {
       this.$emit('closeControlModal')
     },
-    btnOpenEdit(event) {
-      event.stopPropagation()
-      let parent = event.target.parentElement.parentElement
-      let rect = parent.getBoundingClientRect();
-      let data = {
-        left: rect.left,
-        top: rect.top,
-        width: '250px',
-        id: this.card.id
+    checkComplate() {
+      if (this.card.status == 0) {
+        this.isComplete = false
+      } else {
+        this.isComplete = true
       }
-      this.$emit('openQuickEdit', data)
+    },
+     formatStringDate(dateString) {
+      let date = moment(dateString)
+      return date.date() + ' tháng ' + (date.month() + +1);
+    }, formatDate(dateString) {
+      return 'ngày ' + moment(dateString).format('DD-MM-yyyy  HH:mm:ss');
+    },
+    checkDeadline() {
+      let deadline = moment(this.card.deadline);
+      let today = moment();
+      if (deadline < today) {
+        this.isDeadline = 2;
+      } else if (deadline.format('YYYY-MM-dd') === today.format('YYYY-MM-dd')) {
+        this.isDeadline = 1;
+      } else {
+        this.isDeadline = 0;
+      }
     }
   },
   computed: {
     ...mapState('home', [
       'labelShow', 'cardDetail'
     ]),
-  }
+  },
+  mounted() {
+
+    this.checkComplate()
+    this.checkDeadline()
+  },
+  watch: {
+    card: function () {
+      this.checkComplate()
+      this.checkDeadline()
+    }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/scss/card_color";
+
 .cardTodo {
   width: 100%;
   max-height: 162px;
@@ -107,14 +183,17 @@ export default {
   position: relative;
   text-decoration: none;
   z-index: 0;
+
   .detailTodo {
     overflow: hidden;
     padding: 12px 8px 0 8px;
     position: relative;
     z-index: 10;
+
     .list-card-labels {
       overflow: auto;
       position: relative;
+
       .card-label {
         height: 8px;
         line-height: 16px;
@@ -130,10 +209,12 @@ export default {
         color: #fff;
         border-radius: 5px;
       }
+
       .labelShow {
         height: 16px !important;
       }
     }
+
     .btn-edit {
       background-color: #f4f5f7;
       background-clip: padding-box;
@@ -146,6 +227,7 @@ export default {
       top: 2px;
       visibility: hidden;
       z-index: 40;
+
       i {
         color: #42526e;
         height: 20px;
@@ -154,67 +236,126 @@ export default {
         width: 20px;
       }
     }
+
     .btn-edit:hover {
       background-color: #EBECF0;
     }
+
     .text-title {
       margin: 0;
       text-indent: 40px;
       direction: rtl;
       text-align: left;
     }
+
+    .badges {
+      float: left;
+      max-width: 100%;
+      margin-left: -2px;
+      margin-top: 10px;
+
+      .badge {
+        border-radius: 5px;
+        color: #5e6c84;
+        display: inline-block;
+        margin: 0 4px 4px 0;
+        max-width: 100%;
+        min-height: 20px;
+        overflow: hidden;
+        position: relative;
+        padding: 2px;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        vertical-align: top;
+        cursor: pointer;
+
+        .badge-icon {
+          color: #6b778c;
+          vertical-align: top;
+          margin: 0 2px;
+
+          .el-checkbox {
+            margin: 0;
+
+            .is-checked {
+              .el-checkbox__inner {
+                background-color: #61BD4F !important;
+              }
+            }
+          }
+        }
+
+        .icon-checkbox-checked {
+          display: none;
+        }
+
+        .icon-clock {
+          display: inline-block;
+        }
+
+        .badge-text {
+          font-size: 12px;
+          padding: 0 4px 0 2px;
+          vertical-align: top;
+          white-space: nowrap;
+        }
+      }
+
+      .badge:hover {
+        background-color: #ebecf0;
+
+        .icon-checkbox-checked {
+          display: inline-block;
+        }
+
+        .icon-clock {
+          display: none;
+        }
+      }
+
+      .badge.is-due-complete {
+        background-color: #61bd4f !important;
+        border-radius: 3px;
+        color: #fff;
+
+        .badge-icon {
+          color: #fff;
+          vertical-align: top;
+        }
+      }
+
+      .badge.is-due-near {
+        background-color: #f2d600;
+        border-radius: 3px;
+        color: #fff;
+
+        .badge-icon {
+          color: #fff;
+          vertical-align: top;
+        }
+      }
+
+      .badge.is-due-die {
+        background-color: #eb5a46;
+        border-radius: 3px;
+        color: #fff;
+
+        .badge-icon {
+          color: #fff;
+          vertical-align: top;
+        }
+      }
+    }
   }
+
   .thisCard:hover {
     background-color: #F4F5F7;
   }
 }
+
 .cardTodo:hover .btn-edit {
   visibility: visible;
 }
 
-//Màu của nhãn
-.card-label-yellow {
-  background-color: #FACC15 !important;
-}
-
-.card-label-orange {
-  background-color: #FB923C!important;
-}
-
-.card-label-black {
-  background-color:#34363b !important;
-}
-
-.card-label-red {
-  background-color: #F87171 !important;
-}
-
-.card-label-green {
-  background-color: #34D399 !important;
-}
-
-.card-label-purple {
-  background-color: #A78BFA !important;
-}
-
-.card-label-blue {
-  background-color: #60A5FA !important;
-}
-
-.card-label-sky {
-  background-color: #34d3ce !important;
-}
-
-.card-label-lime {
-  background-color: #51e87c !important;
-}
-
-.card-label-pink {
-  background-color: #F472B6 !important;
-}
-
-.card-label-default{
-  background-color: #9CA3AF;
-}
 
 </style>

@@ -6,16 +6,18 @@
                   @keydown.enter="updateListTitle" name="" id=""
                   cols="30" rows="10" :value="listTitle" placeholder="Nhập vào tiêu đề danh sách..."
         ></textarea>
-        <div class="menu" @click="openActionList"><i class="el-icon-s-operation"></i></div>
+        <div class="menu" @click="openActionList"><i class="el-icon-more"></i></div>
       </div>
       <div class="listCard">
         <draggable
             class="dragArea list-group"
-            item-key="id"
             :list="item.cards"
+            item-key="id"
             :animation="100"
-            :move="moveTask">
-          <Task v-for="(card,index) in item.cards" @openQuickEdit="openQuickEdit" :key="index"
+            group="todo"
+            :move="move"
+        >
+          <Task v-for="(card,index) in item.cards" :key="index"
                 @updateData="updateCardList"
                 @openDetailCard="openDetailCard"
                 :id="card.id" :card="card"/>
@@ -44,29 +46,28 @@ export default {
   props: ['item', 'index'],
   data() {
     return {
-      'cardAddOpen': false,
       'listTitle': '',
+      'cardAddOpen': false,
     }
   },
   components: {
     Task,
     NewCard,
-    draggable,
+    draggable
   },
   methods: {
-    moveTask(event) {
+    move(event) {
       let id = event.draggedContext.element.id
       let task = event.to.parentElement
       let directory = task.parentElement;
-      let payload = {
-        index: event.draggedContext.futureIndex + 1,
+
+      let data = {
+        index: event.draggedContext.futureIndex,
         directory_id: directory.parentElement.getAttribute('id')
       }
-      if (id !== event.draggedContext.futureIndex) {
-        api.changeCardList(payload, id).then(() => {
+        api.changePosition(data, id).then(() => {
           this.$emit('updateCardList');
         })
-      }
     },
     openActionList(e){
       let rect = e.target.getBoundingClientRect();
@@ -76,6 +77,7 @@ export default {
         id: this.item.id
       };
       this.$emit('openActionList',data)
+
     },
     loadTitle() {
       this.listTitle = this.item.title;
@@ -84,6 +86,7 @@ export default {
       console.log('a')
       this.cardAddOpen = true;
     },
+
     closeAddCard() {
       this.cardAddOpen = false;
     },
@@ -112,9 +115,6 @@ export default {
     closeControlModal() {
       this.$emit('closeControlModal')
     },
-    openQuickEdit(data){
-      this.$emit('openQuickEdit',data)
-    },
     openDetailCard(id){
       this.$emit('openDetailCard',id)
     }
@@ -125,7 +125,7 @@ export default {
   },
   updated() {
     this.loadTitle();
-  },
+  }
 }
 </script>
 
@@ -138,6 +138,7 @@ export default {
   display: inline-block;
   vertical-align: top;
   white-space: nowrap;
+
   .listContent {
     background-color: #ebecf0;
     border-radius: 3px;
@@ -147,12 +148,15 @@ export default {
     max-height: 100%;
     position: relative;
     white-space: normal;
+
+
     .listHeader {
       flex: 0 0 auto;
       display: flex;
       padding-left: 10px;
       position: relative;
       min-height: 20px;
+
       .list-header-target {
         cursor: pointer;
         position: absolute;
@@ -161,6 +165,7 @@ export default {
         right: 0;
         bottom: 0;
       }
+
       .menu {
         margin: 6px 4px 4px 4px;
         padding: 6px;
@@ -172,13 +177,17 @@ export default {
         z-index: 99;
         font-size: 16px;
       }
+
       .menu:hover {
         background-color: rgba(9, 30, 66, .08);
+        //border-radius: 2px;
       }
+
       .list-header-name {
         height: 22px;
         margin: 0;
       }
+
       .list-header-edit-name {
         resize: none;
         font-size: 16px;
@@ -192,19 +201,32 @@ export default {
         padding: 4px 0 4px 8px;
         cursor: pointer;
       }
+
       textarea:focus {
+        outline: none;
         background-color: white !important;
+        box-shadow: inset 0 0 0 2px #0079bf;
+        border-color: #0079bf;
         overflow: hidden;
         overflow-wrap: break-word;
+        border-radius: 2px;
+        user-select: all;
+      }
+
+      textarea::-webkit-input-placeholder {
+        font-weight: 200;
+        font-size: 14px;
       }
     }
+
     .listFooter {
-      min-height: 40px;
-      max-height: 40px;
+      min-height: 38px;
+      max-height: 38px;
       display: flex;
       justify-content: space-between;
       margin-top: 5px;
       margin-bottom: 8px;
+
       .openCard {
         border-radius: 3px;
         color: #5e6c84;
@@ -218,18 +240,22 @@ export default {
         user-select: none;
         text-align: left;
         cursor: pointer;
+
         .icon-add-card {
           margin-right: 2px;
         }
+
         .text-add-card {
           font-size: 14px;
         }
       }
+
       .openCard:hover {
         background-color: rgba(9, 30, 66, .08);
         color: #172b4d;
       }
     }
+
     .listCard {
       flex: 1 1 auto;
       margin-bottom: 0;
@@ -239,25 +265,35 @@ export default {
       padding: 0 4px;
       z-index: 1;
       min-height: 0;
+
+
     }
 
-//Thanh Cuộn
+    /* width */
     .listCard::-webkit-scrollbar {
-      width: 5px;
+      width: 8px;
     }
+
+    /* Track */
     .listCard::-webkit-scrollbar-track {
       border-radius: 7px;
-      background-color: #93C5FD;
+      background-color: #4a4a727d;
     }
+
+    /* Handle */
     .listCard::-webkit-scrollbar-thumb {
-      background: #9CA3AF;
-      border-radius: 5px;
+      background: #4a4a727d;
+      border-radius: 7px;
     }
+
+    /* Handle on hover */
     .listCard::-webkit-scrollbar-thumb:hover {
       background: #4a4a727d;
     }
   }
+
 }
+
 .listWrapper:first-child {
   margin-left: 8px;
 }

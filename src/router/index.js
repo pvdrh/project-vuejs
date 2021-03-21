@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import Admin from '../views/Admin.vue'
+
 
 Vue.use(VueRouter)
 

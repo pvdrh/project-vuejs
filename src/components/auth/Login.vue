@@ -92,12 +92,12 @@ export default {
   data() {
     return {
       loginForm: {
-        email: "",
         password: "",
+        email: "",
       },
       rules: {
         email: [
-          {required: true, message: 'Email không được để trống!'},
+          {required: true, message: 'Email không được để trống'},
         ],
         password: [
           {required: true, message: 'Mật khẩu không được để trống!'},
@@ -110,13 +110,13 @@ export default {
 
 <style scoped lang="scss">
 .loginWrap {
+  background: white;
+  width: 450px;
+  border-radius: 25px;
   display: block;
   box-sizing: border-box;
   margin: 0 auto;
-  width: 450px;
-  background: white;
-  padding: 25px;
-  border-radius: 25px;
+  padding: 24px;
 
   .logoWrap {
     display: flex;
@@ -134,7 +134,6 @@ export default {
 
   .formInputWrap {
     margin-bottom: 24px;
-
 
     .formInput {
       border-radius: 4px;
@@ -160,17 +159,13 @@ export default {
       }
     }
 
-
     .sui-input-wrap {
       position: relative;
       height: 50px;
-      //width: 100%;
 
       .sui-input {
         box-sizing: border-box;
-        //position: absolute;
         width: 100%;
-        //height: 100%;
         padding: 12px;
         font-size: 14px;
         line-height: 18px;
@@ -179,20 +174,6 @@ export default {
         height: 50px;
         border: 1px solid #d8e0ea;
         outline: unset;
-
-        &:hover,
-        &:active,
-        &:focus {
-          border: 1px solid #0080dd;
-        }
-
-        &.has-error {
-          border: 1px solid #f54b5e;
-        }
-
-        &.read-only {
-          background: #0093e9;
-        }
       }
 
       .sui-input-prefix {
@@ -236,13 +217,8 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-
-        //.sui-input-clear-icon {
-        //  color: $colorSecond;
-        //}
       }
     }
-
   }
 
   .forgotPwdTitle {
@@ -287,11 +263,10 @@ export default {
 
   .submitButton {
     width: 100%;
-    font-weight: 600;
     height: 40px;
     border: none;
-    background: #1877f2;
-    color: white;
+    background: #93453F;
+    color: #fff;
     text-decoration: none;
     font-size: 14px;
     line-height: 18px;
@@ -300,9 +275,8 @@ export default {
     min-width: 64px;
     box-sizing: border-box;
     outline: none;
-    border-radius: 25px;
+    border-radius: 4px;
     cursor: pointer;
-
 
     .btnLabel {
       width: 100%;
@@ -334,26 +308,17 @@ export default {
       background: none;
       padding: 6px 8px;
       box-sizing: border-box;
-      transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-      font-weight: 500;
       border: 0;
       margin: 0;
       display: inline-flex;
       outline: 0;
       color: #5cdee4;
-
-
     }
 
     .registerBtn:hover {
       text-decoration: none;
       background-color: rgba(0, 0, 0, 0.04);
     }
-
-
   }
-
 }
-
 </style>

@@ -33,6 +33,8 @@
                   <div class="edit-labels-no-color-section-color">
                     <DetailLabel class="label-item" :color="'default'" @activeLabel="activeLabel"/>
                   </div>
+                  <div class="edit-labels-no-color-section-text"><p class="u-bottom">Không có màu.</p>
+                    <p class="u-bottom quiet">Điều này sẽ không hiển thị trên đầu thẻ.</p></div>
                 </div>
                 <div class="u-clearfix"><input class="nch-button nch-button--primary wide js-submit"
                                                @click="addLabelToCard" type="submit"
@@ -66,6 +68,8 @@
                   <div class="edit-labels-no-color-section-color">
                     <DetailLabel class="label-item" :color="'default'" @activeLabel="activeLabel"/>
                   </div>
+                  <div class="edit-labels-no-color-section-text"><p class="u-bottom">Không có màu.</p>
+                    <p class="u-bottom quiet">Điều này sẽ không hiển thị trên đầu thẻ.</p></div>
                 </div>
                 <div class="u-clearfix edit-btn">
                   <input class="nch-button nch-button--primary wide js-submit" @click="updateLabel" type="submit"
@@ -85,9 +89,8 @@
                 <label for="id-checklist">Tiêu đề</label>
                 <input id="id-checklist"
                        type="text"
-                       v-model="titleCheckList"
                        dir="auto">
-                <input class="nch-button add-checklist" @click="addCheckList" type="submit" value="Thêm">
+                <input class="nch-button add-checklist" type="submit" value="Thêm">
               </div>
             </div>
           </div>
@@ -191,7 +194,6 @@ export default {
         name: this.titleLabel,
         color: this.isActive.color,
       }
-
       api.updateLabels(data, this.isActive.id).then(() => {
         this.getDetailCard()
         this.$emit('reloadLabel', this.card.id)
@@ -203,17 +205,6 @@ export default {
       this.showAddLabel = false
       this.showEditLabel = false
     },
-    addCheckList(){
-      let data = {
-        title: this.titleCheckList,
-        card_id: this.card.id
-      }
-      api.addCheckList(data).then(() => {
-        this.getDetailCard()
-        this.$emit('reloadLabel', this.card.id)
-        this.closeLabelModal()
-      })
-    }
   }, computed: {
     ...mapState('home', [
       'labelShow', 'cardDetail'
@@ -240,307 +231,12 @@ export default {
       arrayActive: [],
       titleLabel: '',
       isActive: '',
-      titleCheckList:''
     }
-  },
-  // directives: {
-  //   focus: {
-  //     // directive definition
-  //     inserted: function (el) {
-  //       el.focus()
-  //     }
-  //   }
-  // }
+  }
 }
 </script>
 
 <style scoped lang="scss">
-.pop-over {
-  z-index: 9999;
-  background: #fff;
-  border-radius: 3px;
-  box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
-  overflow: hidden;
-  position: absolute;
-  width: 304px;
-  .no-back {
-    .pop-over-header {
-      height: 40px;
-      position: relative;
-      margin-bottom: 8px;
-      text-align: center;
-      .pop-over-header-back-btn {
-        color: #6b778c;
-        padding: 10px 12px 10px 8px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 2;
-        height: 20px;
-        font-size: 16px;
-        line-height: 20px;
-        width: 20px;
-        display: inline-block;
-        font-family: trellicons;
-        font-style: normal;
-        font-weight: 400;
-        text-align: center;
-        text-decoration: none;
-        vertical-align: bottom;
-        cursor: pointer;
-      }
-      .pop-over-header-title {
-        box-sizing: border-box;
-        color: #5e6c84;
-        display: block;
-        line-height: 40px;
-        border-bottom: 1px solid rgba(9, 30, 66, .13);
-        margin: 0 12px;
-        overflow: hidden;
-        padding: 0 32px;
-        position: relative;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        z-index: 1;
-      }
-      .pop-over-header-close-btn {
-        color: #6b778c;
-        padding: 10px 12px 10px 8px;
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 2;
-        height: 20px;
-        font-size: 16px;
-        line-height: 20px;
-        width: 20px;
-        display: inline-block;
-        font-family: trellicons;
-        font-style: normal;
-        font-weight: 400;
-        text-align: center;
-        text-decoration: none;
-        vertical-align: bottom;
-        cursor: pointer;
-      }
-    }
-    div {
-      .pop-over-content {
-        max-height: 368px;
-        overflow-x: hidden;
-        overflow-y: auto;
-        padding: 0 12px 12px;
-        div {
-          div {
-            div.edit-label {
-              label {
-                text-align: left;
-              }
-              input {
-                margin: 4px 0 12px;
-                width: 100%;
-                outline: none;
-                border: none;
-                box-shadow: inset 0 0 0 2px #dfe1e6;
-                background-color: #fafbfc;
-                box-sizing: border-box;
-                border-radius: 3px;
-                display: block;
-                line-height: 20px;
-                padding: 8px 12px;
-                transition-property: background-color, border-color, box-shadow;
-                transition-duration: 85ms;
-                transition-timing-function: ease;
-              }
-              input:focus {
-                border-color: #0079BF !important;
-              }
-              .add-checklist:focus {
-                border-color: #0079BF !important;
-              }
-              .add-checklist {
-                background-color: #49852e;
-                box-shadow: none;
-                border: none;
-                color: #fff;
-                outline: 0;
-                width: 30%;
-              }
-              .u-clearfix {
-                clear: both;
-                content: "";
-                display: table;
-                .label-item {
-                  float: left;
-                  height: 32px;
-                  margin: 0 8px 8px 0;
-                  padding: 0;
-                  width: 48px;
-                }
-                input {
-                  background-color: #49852e;
-                  box-shadow: none;
-                  border: none;
-                  color: #fff;
-                  outline: 0;
-                  padding-left: 24px;
-                  padding-right: 24px;
-                }
-                input.remove-label{
-                  background-color: #cf513d;
-                  box-shadow: none;
-                  border: none;
-                  color: #fff;
-                }
-              }
-              .edit-btn{
-                display: flex;
-                justify-content: space-between;
-                input{
-                  width: 25%;
-                }
-              }
-              .edit-labels-no-color-section {
-                display: flex;
-                .edit-labels-no-color-section-text {
-                  text-align: left;
-                  .u-bottom {
-                    margin: 0;
-                  }
-                  .quiet {
-                    color: #5e6c84;
-                  }
-                }
-              }
-            }
-            .pop-over-section {
-              margin-top: 12px;
-              h4 {
-                color: #5e6c84;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .04em;
-                line-height: 16px;
-                margin-top: 16px;
-                text-transform: uppercase;
-                text-align: left;
-              }
-              .edit-labels-pop-over {
-                margin-bottom: 8px;
-                list-style: none;
-                padding: 0;
-                li {
-                  padding-right: 36px;
-                  position: relative;
-                  .card-label-edit-button {
-                    cursor: pointer;
-                    border-radius: 3px;
-                    padding: 6px;
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    height: 20px;
-                    font-size: 16px;
-                    line-height: 20px;
-                    width: 20px;
-                    display: inline-block;
-                    font-family: trellicons;
-                    font-style: normal;
-                    font-weight: 400;
-                    text-align: center;
-                    text-decoration: none;
-                    vertical-align: bottom;
-                  }
-                  .card-label-edit-button:hover {
-                    background-color: #ECEDF0;
-                  }
-                }
-              }
-              div {
-                button {
-                  background-color: #e4f0f6;
-                  box-shadow: none;
-                  border: none;
-                  outline: 0;
-                  width: 100%;
-                  cursor: pointer;
-                  box-sizing: border-box;
-                  border-radius: 3px;
-                  display: inline-block;
-                  line-height: 20px;
-                  margin-bottom: 8px;
-                  padding: 6px 12px;
-                  text-decoration: none;
-                  position: relative;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      //Thanh cuộn
-      .pop-over-content::-webkit-scrollbar {
-        width: 5px;
-      }
-      .pop-over-content::-webkit-scrollbar-track {
-        border-radius: 5px;
-        background-color: #93C5FD;
-      }
-      .pop-over-content::-webkit-scrollbar-thumb {
-        background: #9CA3AF;
-        border-radius: 5px;
-      }
-      .pop-over-content::-webkit-scrollbar-thumb:hover {
-        background: #4a4a727d;
-      }
-    }
-  }
-}
-
-//Màu của nhãn
-.card-label-yellow {
-  background-color: #FACC15 !important;
-}
-
-.card-label-orange {
-  background-color: #FB923C!important;
-}
-
-.card-label-black {
-  background-color:#34363b !important;
-}
-
-.card-label-red {
-  background-color: #F87171 !important;
-}
-
-.card-label-green {
-  background-color: #34D399 !important;
-}
-
-.card-label-purple {
-  background-color: #A78BFA !important;
-}
-
-.card-label-blue {
-  background-color: #60A5FA !important;
-}
-
-.card-label-sky {
-  background-color: #34d3ce !important;
-}
-
-.card-label-lime {
-  background-color: #51e87c !important;
-}
-
-.card-label-pink {
-  background-color: #F472B6 !important;
-}
-
-.card-label-default{
-  background-color: #9CA3AF;
-}
-
+@import "src/assets/scss/card_color";
+@import "src/assets/scss/label";
 </style>

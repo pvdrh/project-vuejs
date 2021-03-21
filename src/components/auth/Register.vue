@@ -191,13 +191,12 @@ export default {
     .sui-input-wrap {
       position: relative;
       height: 50px;
-      //width: 100%;
-
 
       .sui-input {
         box-sizing: border-box;
-
+        //position: absolute;
         width: 100%;
+        //height: 100%;
         padding: 12px;
         font-size: 14px;
         line-height: 18px;

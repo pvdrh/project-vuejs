@@ -59,6 +59,8 @@ export default {
   display: inline-block;
   vertical-align: top;
   white-space: nowrap;
+
+
   .listContent {
     background-color: #ebecf0;
     border-radius: 3px;
@@ -68,6 +70,8 @@ export default {
     max-height: 100%;
     position: relative;
     white-space: normal;
+
+
     .listHeader {
       flex: 0 0 auto;
       display: flex;
@@ -75,6 +79,7 @@ export default {
       padding-right: 5px;
       position: relative;
       min-height: 20px;
+
       .list-header-target {
         cursor: pointer;
         position: absolute;
@@ -83,6 +88,7 @@ export default {
         right: 0;
         bottom: 0;
       }
+
       .menu {
         margin: 6px 4px 4px 4px;
         padding: 6px;
@@ -94,13 +100,17 @@ export default {
         z-index: 99;
         font-size: 16px;
       }
+
       .menu:hover {
         background-color: rgba(9, 30, 66, .08);
+        //border-radius: 2px;
       }
+
       .list-header-name {
         height: 28px;
         margin: 0;
       }
+
       .list-header-edit-name {
         resize: none;
         font-size: 16px;
@@ -114,6 +124,7 @@ export default {
         padding: 4px 10px 4px 10px;
         cursor: pointer;
       }
+
       textarea:focus {
         outline: none;
         background-color: white !important;
@@ -123,22 +134,27 @@ export default {
         overflow-wrap: break-word;
         border-radius: 2px;
       }
+
       textarea::-webkit-input-placeholder {
         font-weight: 200;
         font-size: 14px;
       }
     }
+
     .cardControl {
       padding: 5px 5px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       .card-control-section {
         display: flex;
         align-items: center;
+
         .btnAddCard {
           padding: 8px 12px;
         }
+
         .btnCloseAddCard {
           margin-left: 5px;
           color: #6b778c;
@@ -146,10 +162,12 @@ export default {
           font-weight: 600;
           cursor: pointer;
         }
+
         .btnCloseAddCard:hover {
           color: #172b4d;
         }
       }
+
       .mod-right {
         .menu {
           margin: 6px 4px 4px 4px;
@@ -160,12 +178,18 @@ export default {
           height: 20px;
           width: 24px;
           z-index: 99;
+          //font-size: 16px;
         }
+
         .menu:hover {
           background-color: rgba(9, 30, 66, .08);
+          //border-radius: 2px;
         }
       }
     }
+
+
   }
+
 }
 </style>
