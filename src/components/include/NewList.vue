@@ -178,12 +178,10 @@ export default {
           height: 20px;
           width: 24px;
           z-index: 99;
-          //font-size: 16px;
         }
 
         .menu:hover {
           background-color: rgba(9, 30, 66, .08);
-          //border-radius: 2px;
         }
       }
     }

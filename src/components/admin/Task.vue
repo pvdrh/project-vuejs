@@ -20,15 +20,14 @@
                v-if="card.deadline!=null">
             <span class="badge-icon icon-sm icon-clock badge-due-icon"> <i
                 class="el-icon-alarm-clock badge-due-icon"></i></span>
-            <span class="badge-icon icon-sm icon-checkbox-checked badge-due-checked" @click="changeStatusTodo">
+            <span class="badge-icon icon-sm icon-checkbox-checked badge-due-checked" @click="statusTask">
               <el-checkbox v-model="isComplete"
-                           @change="changeStatusTodo"></el-checkbox>
+                           @change="statusTask"></el-checkbox>
             </span>
             <span class="badge-text js-due-date-text">{{ formatStringDate(card.deadline) }}</span>
           </div>
         </span>
         <span class="custom-field-front-badges js-custom-field-badges"><span></span></span>
-        <span class="js-plugin-badges"><span></span></span>
       </div>
     </div>
   </div>
@@ -66,23 +65,21 @@ export default {
       e.stopPropagation()
       this.showLable()
     },
-    changeStatusTodo() {
+    statusTask() {
       let data = {};
-
       if (this.isComplete) {
         data.status = 1;
       } else {
         data.status = 0
       }
-
       data.directory_id = this.card.directory_id
-      api.changeStatusTodo(data, this.card.id).then(() => {
+      api.statusTask(data, this.card.id).then(() => {
         this.getDetailCard();
         this.$emit('updateData')
       })
     },
     changeDeadline(data) {
-      api.changeStatusDeadline(data, this.card.id).then(() => {
+      api.statusDeadline(data, this.card.id).then(() => {
         this.getDetailCard();
         this.$emit('updateData')
       })
@@ -163,8 +160,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/scss/card_color";
-
 .cardTodo {
   width: 100%;
   max-height: 162px;
@@ -355,5 +350,38 @@ export default {
   visibility: visible;
 }
 
-
+//Màu của nhãn
+.card-label-yellow {
+  background-color: #FACC15 !important;
+}
+.card-label-orange {
+  background-color: #FB923C!important;
+}
+.card-label-black {
+  background-color:#34363b !important;
+}
+.card-label-red {
+  background-color: #F87171 !important;
+}
+.card-label-green {
+  background-color: #34D399 !important;
+}
+.card-label-purple {
+  background-color: #A78BFA !important;
+}
+.card-label-blue {
+  background-color: #60A5FA !important;
+}
+.card-label-sky {
+  background-color: #34d3ce !important;
+}
+.card-label-lime {
+  background-color: #51e87c !important;
+}
+.card-label-pink {
+  background-color: #F472B6 !important;
+}
+.card-label-default{
+  background-color: #9CA3AF;
+}
 </style>

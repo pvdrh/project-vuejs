@@ -8,9 +8,8 @@
           <div>
             <div>
               <form>
-                <label>Liên kết tên
-                  <input class="js-attachment-name js-autofocus" type="text"
-                                          v-model="title">
+                <label>Liên kết
+                  <input class="js-attachment-name js-autofocus" type="text" v-model="title">
                 </label>
                 <input
                   class="js-edit-attachment wide nch-button nch-button--primary" style="margin: 0;" type="submit"

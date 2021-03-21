@@ -10,10 +10,10 @@ export default {
         labelShow: false,
         // Khai báo state
         list: [],
-        cardDetail:{}
+        cardDetail: {}
     },
     getters: {
-        getList: (state) => (id) => {
+        getDirectories: (state) => (id) => {
             return state.list.find(list => list.id === id)
         }
     },
@@ -27,7 +27,7 @@ export default {
         updateList(state, list) {
             state.list = list;
         },
-        updateCardDetail(state,card){
+        updateCardDetail(state, card) {
             state.cardDetail = card
         }
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="attachment-thumbnail">
-    <img class="attachment-thumbnail-preview js-open-viewer" src="../../assets/image/file.png" alt="">
+    <img class="attachment-thumbnail-preview js-open-viewer" >
     <p  class="attachment-thumbnail-details js-open-viewer"><span
         class="attachment-thumbnail-name">{{ file.name }}</span><a
         class="attachment-thumbnail-details-title-action dark-hover js-attachment-action js-direct-link"
@@ -22,6 +22,7 @@
 <script>
 import moment from "moment";
 import api from "../../api";
+
 export default {
   name: "File",
   props: ['file'],

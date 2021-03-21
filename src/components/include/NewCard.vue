@@ -23,7 +23,7 @@
 import {mapState, mapMutations, mapGetters} from "vuex";
 
 export default {
-  name: "NewCard.vue",
+  name: "NewCard",
   props:['directory'],
   methods: {
     ...mapMutations('home', [
@@ -36,7 +36,7 @@ export default {
       let title= this.$refs.cardTitle.value
 
       if (title.length > 0){
-        let index = this.getList(this.directory.id).cards.length +1
+        let index = this.getDirectories(this.directory.id).cards.length +1
         let data = {
           title: title,
           directory_id: this.directory.id,
@@ -57,7 +57,7 @@ export default {
       'lists'
     ]),
     ...mapGetters('home', [
-      'getList'
+      'getDirectories'
     ])
   }
 }
@@ -68,11 +68,10 @@ export default {
   padding-bottom: 8px;
 
   .cardTodo {
-    background-color: #fff;
+    background-color: white;
     border-radius: 3px;
     box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
     cursor: pointer;
-    //display: block;
     margin-bottom: 8px;
     max-width: 300px;
     min-height: 20px;
@@ -146,12 +145,10 @@ export default {
         height: 28px;
         width: 28px;
         z-index: 99;
-        //font-size: 16px;
       }
 
       .menu:hover {
         background-color: rgba(9, 30, 66, .08);
-        //border-radius: 2px;
       }
     }
   }

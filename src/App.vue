@@ -26,7 +26,7 @@ export default {
     }
   },
   mounted() {
-    api.getAuthUser().then((response) => {
+    api.getUser().then((response) => {
       this.updateAuthUser(response.data)
     })
   }

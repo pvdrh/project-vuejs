@@ -49,8 +49,8 @@ export default {
   props: ['card'],
   data() {
     return {
+      file:'',
       deadLine: '',
-      file:''
     }
   },
   methods: {
@@ -64,7 +64,7 @@ export default {
         formData.append('file',this.file);
       }
 
-      api.uploadFileCard(formData,this.card.id).then(()=>{
+      api.addFile(formData,this.card.id).then(()=>{
         this.$emit('updateDetailCard')
       })
 
@@ -86,7 +86,6 @@ export default {
       this.$emit('showControl', data)
     },
     formatDate(dateString) {
-      // Format từ dạng "02/24/2021 18:12:23" thành định dạng kiểu: "24/02/2021"
       return moment(dateString).format('YYYY-MM-DD HH:mm:ss')
     },
     deleteCard(){
@@ -97,5 +96,72 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/scss/dialog_sibar";
+.window-sidebar{
+  float: right;
+  padding: 0 16px 8px 8px;
+  width: 168px;
+  overflow: hidden;
+  z-index: 10;
+
+  .window-module{
+    clear: both;
+    margin-bottom: 24px;
+    position: relative;
+
+    h3{
+      margin-top: 0;
+      color: #5e6c84;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      line-height: 20px;
+      margin-bottom: -4px;
+    }
+
+    .u-clearfix{
+      .remove-sidebar{
+        background-color: #EB5A46;
+        color: #fff!important;
+      }
+
+      .remove-sidebar:hover{
+        background-color: #EB5A46 !important;
+      }
+      .datetime-btn{
+        position: relative;
+        .el-date-editor{
+          position: absolute;
+          top: 0;
+          left: 0;
+          opacity: 0;
+
+          input{
+            cursor: pointer!important;
+          }
+        }
+      }
+      a:visited{
+        color: #172b4d;
+      }
+
+      .btn-upload{
+        cursor: pointer;
+        position: relative;
+        .uploadFile{
+          position: absolute;
+          opacity: 0;
+          cursor: pointer;
+        }
+      }
+      .icon-sm{
+        height: 20px;
+        font-size: 16px;
+        line-height: 20px;
+        width: 20px;
+        margin: 0 6px 0 -6px;
+      }
+    }
+  }
+}
 </style>

@@ -1,16 +1,16 @@
 <template>
-  <div class="pop-over is-shown" :style="{left: offset.left+'px', top: offset.top+'px'}" data-elevation="1">
+  <div class="small-modal is-shown" :style="{left: offset.left+'px', top: offset.top+'px'}" data-elevation="1">
     <div class="no-back">
-      <div class="pop-over-header js-pop-over-header"><span class="pop-over-header-title el-icon-setting"> Tùy Chọn</span>
-        <a href="#"
-           class="pop-over-header-close-btn icon-sm icon-close" @click="closeAction"><i class="el-icon-close"></i></a>
+      <div class="header js-pop-over-header"><span class="header-title el-icon-setting"> Tùy Chọn</span>
+        <a @click="closeAction"
+           class="btn-close icon-sm icon-close" ><i class="el-icon-close"></i></a>
       </div>
       <div>
-        <div class="conten js-pop-over-content u-fancy-scrollbar js-tab-parent" style="max-height: 475px;">
+        <div style="max-height: 480px;" class="conten js-pop-over-content u-fancy-scrollbar js-tab-parent">
           <div>
             <div>
               <ul class="pop-over-list">
-                <li><a class="js-close-list remove-list el-icon-delete" @click="deleteList"> Xóa danh sách.</a></li>
+                <li><a @click="deleteList" class="js-close-list remove-list el-icon-delete"> Xóa danh sách.</a></li>
               </ul>
             </div>
           </div>
@@ -36,83 +36,59 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.pop-over {
-  z-index: 9999;
+.small-modal {
   background: white;
-  border-radius: 3px;
-  box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
+  border-radius: 5px;
   overflow: hidden;
   position: absolute;
   width: 180px;
+  z-index: 9999;
+  box-shadow: 0 8px 16px -4px rgb(9 30 66 / 30%), 0 0 0 2px rgb(9 30 66 / 10%);
 
   .no-back {
-    .pop-over-header {
-      height: 40px;
+    .header {
+      height: 50px;
       position: relative;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       text-align: center;
 
-      .pop-over-header-back-btn {
-        color: #6b778c;
-        padding: 10px 12px 10px 8px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 2;
-        height: 20px;
-        font-size: 16px;
-        line-height: 20px;
-        width: 20px;
-        display: inline-block;
-        font-family: trellicons;
-        font-style: normal;
-        font-weight: 400;
-        text-align: center;
-        text-decoration: none;
-        vertical-align: bottom;
-        cursor: pointer;
-      }
-
-      .pop-over-header-title {
+      .header-title {
         box-sizing: border-box;
-        color: #5e6c84;
+        border-bottom: 1px solid rgba(9, 30, 66, 0.25);
+        color: gray;
+        z-index: 1;
         display: block;
         line-height: 40px;
-        border-bottom: 1px solid rgba(9, 30, 66, .13);
         margin: 0 12px;
         overflow: hidden;
         padding: 0 32px;
         position: relative;
         text-overflow: ellipsis;
         white-space: nowrap;
-        z-index: 1;
       }
 
-      .pop-over-header-close-btn {
-        color: #6b778c;
+      .btn-close {
+        color: gray;
         padding: 10px 12px 10px 8px;
         position: absolute;
         top: 0;
-        right: 0;
         z-index: 2;
         height: 20px;
         font-size: 16px;
+        cursor: pointer;
         line-height: 20px;
         width: 20px;
         display: inline-block;
-        font-family: trellicons;
-        font-style: normal;
-        font-weight: 400;
+        right: 0;
         text-align: center;
         text-decoration: none;
         vertical-align: bottom;
-        cursor: pointer;
       }
     }
 
     div {
       .conten {
-        max-height: 368px;
+        max-height: 360px;
         overflow-x: hidden;
         overflow-y: auto;
         padding: 0 12px 12px;
@@ -132,48 +108,34 @@ export default {
                 a {
                   cursor: pointer;
                   display: block;
-                  font-weight: 400;
                   padding: 6px 12px;
                   position: relative;
                   margin: 0 -12px;
                   text-decoration: none;
                 }
-                a:visited{
-                  color: #172b4d;;
-                }
-                a:hover{
-                  background-color: #F5F6F8;
-                }
               }
-
-
             }
           }
         }
       }
 
-      /* width */
       .conten::-webkit-scrollbar {
-        height: 8px;
-        //width: 98%;
-        width: 8px;
+        height: 6px;
+        width: 6px;
       }
 
-      /* Track */
       .conten::-webkit-scrollbar-track {
         border-radius: 7px;
-        background-color: #4f4f5073;
+        background-color: gray;
       }
 
-      /* Handle */
       .conten::-webkit-scrollbar-thumb {
-        background: #bcbcbe63;
+        background: gray;
         border-radius: 7px;
       }
 
-      /* Handle on hover */
       .conten::-webkit-scrollbar-thumb:hover {
-        background: #d3d3d87d;
+        background: rgb(99, 96, 96);
       }
     }
   }

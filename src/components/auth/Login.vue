@@ -6,35 +6,27 @@
           <img class="logo" src="../../assets/image/zent_logo_dark.png" alt=""></div>
         <el-form :model="loginForm" :rules="rules" ref="ruleForm">
           <div class="formInputWrap">
-            <div class="sui-input-wrap">
-              <div class="sui-input-prefix"></div>
               <el-form-item prop="email">
-                <el-input placeholder="Email" v-model="loginForm.email" autocomplete="off"></el-input>
+                <el-input v-model="loginForm.email" placeholder="Email"></el-input>
               </el-form-item>
-              <div class="sui-input-subfix"></div>
-            </div>
           </div>
           <div class="formInputWrap">
-            <div class="sui-input-wrap">
-              <div class="sui-input-prefix"></div>
               <el-form-item prop="password">
-                <el-input placeholder="Mật khẩu" type="password" v-model="loginForm.password"
-                          autocomplete="off"></el-input>
+                <el-input type="password" v-model="loginForm.password" placeholder="Mật khẩu"
+                          ></el-input>
               </el-form-item>
-              <div class="sui-input-subfix"></div>
             </div>
-          </div>
 
-          <button class="submitButton"
-                  tabindex="0" type="button" @click="submitLogin()">
-            <span class="btnLabel">ĐĂNG NHẬP</span>
+          <button class="submitBtn" @click="login"
+                  tabindex="0" type="button">
+            <span class="btn">Đăng Nhập</span>
             <span class="MuiTouchRipple-root"></span>
           </button>
         </el-form>
-
-        <div class="returnRegisterWrap">
+          <p>Hoặc</p>
+        <div class="registerWrap">
           <button class="registerBtn">
-            <span class="btnLabel" @click="register()">Đăng kí</span>
+            <span class="btn" @click="register">Đăng ký</span>
             <span class="MuiTouchRipple-root"></span>
           </button>
         </div>
@@ -44,9 +36,9 @@
 </template>
 
 <script>
+import api from '../../api'
 import LoginLayout from "@/layouts/LoginLayout";
 import {mapState, mapActions, mapMutations} from 'vuex'
-import api from '../../api'
 
 export default {
   name: "Login",
@@ -55,18 +47,18 @@ export default {
   },
   methods: {
     ...mapActions,
-    ...mapMutations('auth', ['updateLoginStatus', 'updateAuthUser', 'updateToken']),
+    ...mapMutations('auth', ['updateToken','updateLoginStatus', 'updateAuthUser']),
     register() {
       this.$router.push('/register')
     },
-    submitLogin() {
+    login() {
       this.$refs.ruleForm.validate((valid) => {
-        let data= {
-          email: this.loginForm.email,
+        let infor= {
           password: this.loginForm.password,
+          email: this.loginForm.email,
         }
         if (valid) {
-          api.login(data).then((response) => {
+          api.login(infor).then((response) => {
             localStorage.setItem('access_token', response.data.access_token)
             this.updateToken(response.data.access_token)
             this.updateLoginStatus(true)
@@ -75,7 +67,7 @@ export default {
               this.$router.push('/home')
             }
           }).catch(() => {
-            this.$message({message: 'Có 1 lỗi gì đó', type: 'error'});
+            this.$message({message: 'Sai tài khoản hoặc mật khẩu.', type: 'error', center:true});
           })
         } else {
           return false;
@@ -97,10 +89,10 @@ export default {
       },
       rules: {
         email: [
-          {required: true, message: 'Email không được để trống'},
+          {required: true, message: 'Email không được để trống.'},
         ],
         password: [
-          {required: true, message: 'Mật khẩu không được để trống!'},
+          {required: true, message: 'Mật khẩu không được để trống.'},
         ],
       },
     }
@@ -111,174 +103,42 @@ export default {
 <style scoped lang="scss">
 .loginWrap {
   background: white;
-  width: 450px;
+  width: 360px;
   border-radius: 25px;
   display: block;
   box-sizing: border-box;
   margin: 0 auto;
   padding: 24px;
+  margin-bottom:10px;
 
   .logoWrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 25px;
 
     img {
-      width: 200px;
+      width: 210px;
       box-sizing: border-box;
       vertical-align: middle;
       border-style: none;
     }
   }
+}
 
-  .formInputWrap {
-    margin-bottom: 24px;
-
-    .formInput {
-      border-radius: 4px;
-      height: 50px;
-    }
-
-    .error {
-      border-color: #ee4f5e !important;
-    }
-
-    .sui-error-message {
-      display: flex;
-      align-items: center;
-      color: #ee4f5e;
-      margin-top: 8px;
-      font-size: 12px;
-
-      .sui-error-message-icon {
-        color: #ee4f5e;
-        font-size: 12px;
-        margin-right: 4px;
-        height: 12px;
-      }
-    }
-
-    .sui-input-wrap {
-      position: relative;
-      height: 50px;
-
-      .sui-input {
-        box-sizing: border-box;
-        width: 100%;
-        padding: 12px;
-        font-size: 14px;
-        line-height: 18px;
-        color: #253036;
-        border-radius: 4px;
-        height: 50px;
-        border: 1px solid #d8e0ea;
-        outline: unset;
-      }
-
-      .sui-input-prefix {
-        position: absolute;
-        top: 0;
-        left: 12px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .sui-input-subfix {
-        position: absolute;
-        top: 0;
-        right: 12px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      &.sui-input-has-prefix {
-        .sui-input {
-          padding-left: 40px;
-        }
-      }
-
-      &.sui-input-has-subfix {
-        .sui-input {
-          padding-right: 40px;
-        }
-      }
-
-      .sui-input-clear {
-        cursor: pointer;
-        position: absolute;
-        top: 0;
-        right: 12px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-  }
-
-  .forgotPwdTitle {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 40px;
-  }
-
-  .forgotPwdDescription {
-    font-size: 14px;
-    color: #54657a;
-    margin-bottom: 8px;
-  }
-
-  .forgotPwdWrap {
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    .forgotPwdBtn {
-      color: #0080dd;
-      line-height: 18px;
-      background: transparent;
-      border-radius: 4px;
-      text-transform: none;
-      border: none;
-
-      background: none;
-      outline: none;
-      cursor: pointer;
-      font-size: 15px;
-      padding: 6px 8px;
-    }
-
-    .forgotPwdBtn:hover {
-      background: #F5F5F5;
-    }
-  }
-
-
-  .submitButton {
+  .submitBtn {
+    color: white;
     width: 100%;
-    height: 40px;
+    height: 36px;
     border: none;
-    background: #93453F;
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-    line-height: 18px;
-    text-transform: none;
-    padding: 6px 8px;
-    min-width: 64px;
+    background: #1877f2;
+    border-radius: 25px;
+    font-size: 16px;
     box-sizing: border-box;
     outline: none;
-    border-radius: 4px;
     cursor: pointer;
 
-    .btnLabel {
+    .btn {
       width: 100%;
       display: inherit;
       align-items: inherit;
@@ -287,38 +147,25 @@ export default {
     }
   }
 
-  .returnRegisterWrap {
-    margin-top: 8px;
-    display: flex;
+  .registerWrap {
     align-items: center;
+    display: flex;
     justify-content: center;
-    padding-top: 24px;
     box-sizing: border-box;
-    color: #5cdee4;
 
     .registerBtn {
-      font-size: 14px;
-      line-height: 18px;
-      background: transparent;
-      border-radius: 4px;
-      text-transform: none;
-      outline: none;
-      cursor: pointer;
-      border: none;
-      background: none;
-      padding: 6px 8px;
-      box-sizing: border-box;
-      border: 0;
-      margin: 0;
-      display: inline-flex;
-      outline: 0;
-      color: #5cdee4;
-    }
-
-    .registerBtn:hover {
-      text-decoration: none;
-      background-color: rgba(0, 0, 0, 0.04);
+    color: white;
+    width: 80%;
+    height: 36px;
+    border: none;
+    background: #42b72a;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    cursor: pointer;
     }
   }
-}
+
 </style>

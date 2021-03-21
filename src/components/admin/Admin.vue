@@ -120,31 +120,25 @@
                                  dir="auto"></div>
                             <p v-if="!editDescriptionModal && cardDetail.description==null" @click="openEditDescription"
                                class="u-bottom js-hide-with-desc">
-                              <a
-                                  class="description-fake-text-area hide-on-edit js-edit-desc  js-hide-with-draft"
-                                  href="#">Thêm
-                                mô tả chi tiết hơn...</a></p>
+                                 <a class="description-fake-text-area hide-on-edit js-edit-desc  js-hide-with-draft"
+                                  href="#">Thêm mô tả chi tiết hơn.</a></p>
                             <p v-if="!editDescriptionModal && cardDetail.description!=null" @click="openEditDescription"
                                class="u-bottom js-hide-with-desc">
-                              <a
-                                  class="description-fake-text-area hide-on-edit js-edit-desc  js-hide-with-draft"
-                                  href="#">{{
-                                  cardDetail.description
-                                }}</a>
+                                  <a class="description-fake-text-area hide-on-edit js-edit-desc js-hide-with-draft">
+                                {{ cardDetail.description }}</a>                                  
                             </p>
                             <div class="description-edit edit" v-if="editDescriptionModal">
                               <textarea-autosize
+                                  :min-height="36"
                                   id="descriptionCard"
                                   v-model="description"
                                   class="description-draft"
-                                  placeholder="Thêm mô tả chi tiết hơn..."
+                                  placeholder="Thêm mô tả chi tiết hơn."
                                   ref="descriptionCard"
-                                  :min-height="30"
-                                  @keydown.enter="updateCardDescription"
-                              />
+                                  @keydown.enter="updateCardDescription"/>
                               <div class="edit-controls u-clearfix"><input
-                                  class="nch-button nch-button--primary confirm mod-submit-edit js-save-edit"
                                   type="submit"
+                                  class="nch-button nch-button--primary confirm mod-submit-edit js-save-edit"
                                   value="Lưu" @click="updateCardDescription">
                                 <div class="btnCloseAddCard" @click="editDescriptionModal = false"><i
                                     class="el-icon-close"></i></div>
@@ -161,11 +155,11 @@
                     <span
                         class="window-module-title-icon icon-lg icon-attachment"><i
                         class="el-icon-paperclip"></i></span>
-                    <h3 class="u-inline-block">Các tập tin đính kèm</h3>
+                    <h3 class="u-inline-block">Tập tin đính kèm</h3>
                   </div>
                   <div class="u-gutter">
                     <div class="u-clearfix attachment-list ui-sortable">
-                      <File v-for="(item,index) in cardDetail.files" :file="item"
+                      <AddFile v-for="(item,index) in cardDetail.files" :file="item"
                             @updateCardDetail="getDetailCard(cardDetail.id)"  @showEditFile="openEditFile" :key="index"/>
                     </div>
                   </div>
@@ -174,8 +168,8 @@
                      class="checklist-list window-module js-checklist-list js-no-higher-edits ui-sortable">
                 </div>
               </div>
-              <DialogSidebar @updateDetailCard="getDetailCard(cardDetail.id)" @showControl="handleShowControl"
-                           @deleteCard="deleteCard" @changeDeadline="changeDeadline"
+              <DialogSidebar @updateDetailCard="getDetailCard(cardDetail.id)" @deleteCard="deleteCard" @showControl="handleShowControl"
+                            @changeDeadline="changeDeadline"
                            :card="cardDetail"/>
             </div>
           </div>
@@ -195,14 +189,14 @@ import List from "@/components/admin/List";
 import NewList from "@/components/include/NewList";
 import draggable from "vuedraggable";
 import {mapMutations, mapState} from 'vuex'
-import api from '../../api';
 import _ from "lodash";
 import PickColor from "@/components/include/PickColor";
 import DialogSidebar from "@/components/include/DialogSidebar";
 import moment from "moment";
 import Action from "@/components/include/Action";
-import File from "@/components/include/File";
+import AddFile from "@/components/include/AddFile";
 import EditFile from "@/components/include/EditFile";
+import api from '../../api';
 
 export default {
   name: "Admin",
@@ -230,30 +224,27 @@ export default {
   },
   components: {
     AdminLayout,
+    Action,
     List,
     draggable,
     NewList,
     PickColor,
     DialogSidebar,
-    Action,
-    File,
+    AddFile,
     EditFile
   },
   methods: {
     ...mapMutations('home', [
       'updateList', 'updateCardDetail'
     ]),
-    moveList(e) {
-      console.log(e)
-
-      let id = e.draggedContext.element.id
-
-      let payload = {
-        index: e.draggedContext.futureIndex + 1,
+    moveList(event) {
+      let id = event.draggedContext.element.id
+      let load = {
+        index: event.draggedContext.futureIndex + 1,
       }
-      console.log(payload)
-      if (id !== e.draggedContext.futureIndex) {
-        api.changeIndexList(payload, id).then(() => {
+      console.log(load)
+      if (id !== event.draggedContext.futureIndex) {
+        api.changeIndexList(load, id).then(() => {
           this.getDataList()
         })
       }
@@ -286,7 +277,7 @@ export default {
       this.addList = false
     },
     getDataList() {
-      api.getList().then((response) => {
+      api.getDirectories().then((response) => {
         this.updateList(response.data.data)
       })
     },
@@ -330,7 +321,7 @@ export default {
       this.offset = data
     },
     getDatalabel() {
-      api.getLabels().then((response) => {
+      api.getLabel().then((response) => {
         this.labels = response.data.data;
       })
     },
@@ -371,7 +362,7 @@ export default {
       this.editDescriptionModal = true;
     },
     async changeDeadline(data) {
-      await api.changeStatusDeadline(data, this.card.id).then(() => {
+      await api.statusDeadline(data, this.card.id).then(() => {
         this.getDetailCard(this.card.id);
         this.loadDeadline();
       })
