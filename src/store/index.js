@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import home from './modules/home/index'
-import profile from './modules/profile/index'
-import auth from './modules/auth/index'
+import createPersistedState from "vuex-persistedstate";
+import home from './modules/home'
+import auth from './modules/auth'
 
 Vue.use(Vuex)
 
@@ -14,10 +14,9 @@ const store = new Vuex.Store({
         // Khai báo mutations
     },
     modules: {
-        home,
-        profile,
-        auth
-    }
+        home, auth
+    },
+    plugins: [createPersistedState()]
 })
 
 export default store

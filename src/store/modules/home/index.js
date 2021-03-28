@@ -1,34 +1,22 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-
-Vue.use(Vuex)
-
 export default {
     namespaced: true,
     state: {
-        labelShow: false,
-        // Khai báo state
-        list: [],
-        cardDetail: {}
+        //Khai báo state
     },
     getters: {
-        getDirectories: (state) => (id) => {
-            return state.list.find(list => list.id === id)
-        }
+        // Khai báo getters
     },
     mutations: {
-        addCard(state, data) {
-            state.list.find(list => list.id === data.list_id).cards.push(data.card)
+        addList(state, newList) {
+            state.lists.push({ id: newList[0], name: newList[1] })
         },
-        showLable(state) {
-            state.labelShow = !state.labelShow
+        addNewCard(state, newCard) {
+            state.cards.push({ id: newCard[0], name: newCard[1], description: '', list_id: newCard[2] })
         },
-        updateList(state, list) {
-            state.list = list;
-        },
-        updateCardDetail(state, card) {
-            state.cardDetail = card
+        removeList(state, list) {
+            if (state.lists.indexOf(list) > -1) {
+                state.lists.splice(this.lists.indexOf(list), 1);
+            }
         }
     },
 }

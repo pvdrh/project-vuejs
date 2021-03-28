@@ -1,6 +1,8 @@
 <template>
-  <div class="container">
-    <slot name="login"></slot>
+  <div class="hello">
+    <div class="container">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -11,16 +13,15 @@ export default {
 </script>
 
 <style scoped>
-.container{
-  background-image: url("../assets/image/bg-login.jpg"), linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
+.container {
   height: 100vh;
   overflow: auto;
-  background-position: center;
+  background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: url("../assets/image/bg-login.jpg");
 }
-
 </style>

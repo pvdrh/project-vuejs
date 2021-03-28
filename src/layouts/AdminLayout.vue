@@ -1,125 +1,153 @@
 <template>
-  <div class="container">
-    <el-container class="wrap">
-      <el-header class="header">
-        <div class="header-container">
-          <div class="header-left"></div>
-          <div class="header-center">
-            <div class="logo">
-              <img @click="goBack" src="../assets/image/zent_logo_dark.png">
-            </div>
-          </div>
-          <div class="header-right">
-            <el-dropdown>
-              <el-avatar
-                  src="https://genk.mediacdn.vn/k:thumb_w/640/2015/screen-shot-2015-07-30-at-2-31-57-pm-1438334096188/cau-chuyen-ve-nguoi-tao-ra-chu-ech-xanh-than-thanh.png"></el-avatar>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-user">
-                 <router-link to="/profile">{{authUser.name}}</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item icon="el-icon-setting">
-                  <a>Đổi Mật Khẩu</a>
-                </el-dropdown-item>
-                <el-dropdown-item icon="el-icon-unlock"><a @click="logout">Đăng Xuất</a></el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
+  <div class="hello">
+    <div class="container">
+      <div class="header">
+        <div class="logo" @click="goToHome()">
+          <img src="../assets/image/zent_logo_dark.png">
         </div>
-      </el-header>
-      <el-main class="main">
-        <slot name="main"></slot>
-      </el-main>
-    </el-container>
+        <div class="avatar" @click="openSetting()">
+          <el-avatar>
+            <img v-if="avatarUrl" :src="avatarUrl">
+            <img v-else src="../assets/image/avatar.jpg">
+          </el-avatar>
+        </div>
+        <div class="user-setting" ref="profile">
+          <div class="setting" @click="openProfile()"> <i class=" el-icon-user" style="margin-right:5px"></i> {{user.name}}</div>
+          <div class="logout" @click="changePass"> <i class="el-icon-setting" style="margin-right:5px"></i>Đổi Mật Khẩu</div>
+          <div class="logout" @click="handlelogout()"> <i class=" el-icon-unlock" style="margin-right:5px"></i> Đăng Xuất</div>
+        </div>
+        
+      </div>
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
 import {mapMutations, mapState} from "vuex";
+import api from "@/api";
 
 export default {
-  name: "AdminLayout",
-  methods: {
-    ...mapMutations('auth', ['updateLoginStatus', 'updateAuthUser', 'updateToken']),
-    async logout() {
-        localStorage.removeItem('access_token')
-        this.updateLoginStatus(false)
-        this.updateAuthUser({})
-        if (this.$router.currentRoute.name !== 'Login') {
-          await this.$router.push({ name: 'Login' })
-        }
-      },
-      goBack(){
-        this.$router.push({ name: 'Home' })
-      }
+  data () {
+    return {
+      user: [],
+      baseUrl: 'http://vuecourse.zent.edu.vn/storage/users/',
+      avatarUrl: ''
+    }
   },
-  computed:{
-    ...mapState('auth',[
-        'authUser'
-    ]),
+  name: "AdminLayout",
+  computed: {
+    ...mapState('auth', ['isAuthenticated', 'authUser']),
+  },
+  methods: {
+    ...mapMutations('auth', ['updateLoginStatus', 'updateAuthUser']),
+    openSetting() {
+      if (this.$refs.profile.style.visibility == 'visible')
+        this.$refs.profile.style.visibility = 'hidden'
+      else this.$refs.profile.style.visibility = 'visible'
+    },
+    openProfile() {
+      this.$router.push('profile')
+      if (this.$refs.profile.style.visibility == 'visible')
+        this.$refs.profile.style.visibility = 'hidden'
+      else this.$refs.profile.style.visibility = 'visible'
+    },
+    goToHome() {
+      this.$router.push('home')
+    },
+    changePass() {
+      this.$router.push('password')
+    },
+    handlelogout() {
+      localStorage.removeItem('access_token')
+      this.updateLoginStatus(false)
+      this.updateAuthUser({})
+      if (this.$router.currentRoute.name !== 'Login') {
+        this.$router.push({ name: 'Login' })
+      }
+    }
+  },
+  mounted() {
+    api.getAuthUser().then((response) => {
+      if (response) {
+        this.user = response.data
+        if (response.data.avatar) {
+          this.avatarUrl = this.baseUrl + response.data.avatar
+        }
+      }
+    })
   }
 }
 </script>
 
-<style scoped lang="scss">
-.container {
-  height: 100vh;
-  background-image: url("../assets/image/bg.jpg");
-  overflow: auto;
-  position: relative;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .wrap {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+<style lang="scss" scoped>
+  .container {
+    height: 100vh;
+    background-image: url("../assets/image/bg.jpg");
+    background-size: cover;
+    overflow: auto;
+    position: relative;
+    background-position: center;
+    background-repeat: no-repeat;
+    align-items: center;
+    justify-content: center;
 
     .header {
-      padding: 0;
-      min-height: 80px;
-      max-height: 80px;
-      overflow: hidden;
+      width: 100%;
+      height: 50px;
+      padding: 4px;
+      box-sizing: border-box;
+      background-color: rgba(0, 0, 0, 0.25);
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-      .header-container {
-        max-height: 50px;
-        background-color: rgba(0, 0, 0, .25);
-        box-sizing: border-box;
-        display: flex;
-        overflow: hidden;
-        justify-content: space-between;
+      .logo {
+        width: 110px;
+        height: 50px;
+        cursor: pointer;
 
-        .header-center {
-          .logo {
-            img {
-              width: 110px;
-              height: 50px;
-              cursor: pointer;
-            }
-          }
+        img {
+          width: 100%;
         }
+      }
 
-        .header-right {
-          .el-dropdown {
-            .el-avatar {
-              width: 36px;
-              height: 36px;
-              margin: 6px;
-            }
-          }
+      .logo:hover {
+        opacity: 0.75;
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+        position: absolute;
+        right: 10px;
+        cursor: pointer;
+
+        .el-avatar {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      .user-setting {
+        position: absolute;
+        top: 45px;
+        right: 5px;
+        background: white;
+        visibility: hidden;
+        height: auto;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        z-index: 50;
+        
+        .setting, .logout {
+          justify-content: left;
+          display: flex;
+          padding: 8px;
+          cursor: pointer;
         }
       }
     }
-
-    .main {
-      position: relative;
-      height: 100%;
-      overflow-y: hidden;
-      padding: 0;
-    }
   }
-}
 </style>

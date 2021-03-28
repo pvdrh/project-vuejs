@@ -1,46 +1,50 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-
 Vue.use(VueRouter)
 
 const routes = [{
         path: '/',
-        redirect: '/login'
-    },
-    {
-        path: '/home',
         name: 'Home',
         component: () =>
-            import ('../components/admin/Admin')
+            import ('../layouts/AdminLayout'),
+        children: [{
+                path: 'home',
+                name: 'Home',
+                component: () =>
+                    import ('../views/Home')
+            },
+            {
+                path: '/password',
+                component: () =>
+                    import ('../views/PasswordSetting')
+            },
+            {
+                path: '/profile',
+                name: 'Profile',
+                component: () =>
+                    import ('../views/Profile')
+            },
+
+        ]
     },
     {
-        path: '/profile',
-        name: 'Profile',
+        path: '/path',
         component: () =>
-            import ('../components/admin/Profile')
+            import ('../layouts/LoginLayout'),
+        children: [{
+                path: 'login',
+                name: 'Login',
+                component: () =>
+                    import ('../views/LoginForm')
+            }, {
+                path: 'register',
+                component: () =>
+                    import ('../views/Register')
+            },
+
+        ]
     },
-    {
-        path: '/login',
-        name: 'Login',
-        component: () =>
-            import ('../components/auth/Login')
-    },
-    {
-        path: '/register',
-        name: 'Register',
-        component: () =>
-            import ('../components/auth/Register')
-    },
-    // {
-    //   path: '/forgot-password',
-    //   name: 'Forgot',
-    //   component: () => import('../components/Buoi5/auth/ForgotPassword')
-    // },
-    // {
-    //   path: '/logout',
-    //   redirect: 'login'
-    // }
 ]
 
 const router = new VueRouter({

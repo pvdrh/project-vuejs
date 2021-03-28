@@ -5,52 +5,32 @@
     </div>
     <el-form :model="ruleForm" :label-position="label" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
       <el-form-item prop="email">
-        <label style="float: left; line-height:30px">Email</label>
+        <label style="float: left; line-height:30px" >Email</label>
         <el-input v-model="ruleForm.email"></el-input>
       </el-form-item>
-      <el-form-item prop="name">
-        <label style="float: left; line-height:30px">Họ tên</label>
-        <el-input v-model="ruleForm.name"></el-input>
-      </el-form-item>
       <el-form-item prop="password">
-        <label style="float: left; line-height:30px">Mật khẩu</label>
+        <label style="float: left; line-height:30px" >Mật khẩu</label>
         <el-input type="password" v-model="ruleForm.password"></el-input>
       </el-form-item>
-      <el-form-item prop="checkPass">
-        <label style="float: left; line-height:30px">Xác nhận mật khẩu</label>
-        <el-input type="password" v-model="ruleForm.checkPass"></el-input>
-      </el-form-item>
     </el-form>
-    <button class="btn-login" @click="handleRegister('ruleForm')">
-      ĐĂNG KÝ
-    </button>
-    <div class="register el-icon-back">
-      <el-button style="color:black" @click="login()">Đăng nhập</el-button>
+    <button @click="handlelogin('ruleForm')" class="btn-login">ĐĂNG NHẬP</button>
+    <p>Hoặc</p>
+    <div class="register">
+      <el-button @click="register()">Đăng ký</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import api from '../api'
-
+import {mapState, mapMutations} from 'vuex'
 export default {
   name: "LoginForm",
   data() {
-    var confirm = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Mật khẩu vừa nhập không khớp.'));
-      } else if (value !== this.ruleForm.password) {
-        callback(new Error('Mật khẩu không chính xác!'));
-      } else {
-        callback();
-      }
-    };
     return {
       ruleForm: {
         email: '',
         password: '',
-        checkPass: '',
-        name: '',
       },
       rules: {
         email: [
@@ -61,43 +41,42 @@ export default {
           { required: true, message: 'Mật khẩu không được bỏ trống!', trigger: 'change' },
           { min: 6, message: 'Mật khẩu không được ít hơn 6 kí tự', trigger: 'blur' },
         ],
-        name: [
-          { required: true, message: 'Tên người dùng không được bỏ trống', trigger: 'change' },
-        ],
-        checkPass: [
-          { validator: confirm, trigger: 'blur' }
-        ],
       },
       label: 'top',
     }
   },
+  computed: {
+    ...mapState('auth', ['isAuthenticated']),
+  },
   methods: {
+    ...mapMutations('auth', ['updateLoginStatus', 'updateAuthUser', 'updateToken']),
     forgotPass() {
       this.$router.push('forgot-password')
     },
-    handleRegister(formName) {
+    handlelogin(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let data = {
-            name: this.ruleForm.name,
             email: this.ruleForm.email,
-            password: this.ruleForm.password
+            password: this.ruleForm.password,
           }
-          api.register(data).then(() => {
-            this.$message({
-              message: 'Đăng ký thành công.',
-              type: "success",
-              center: true
-            })
+          api.login(data).then((response) => {
+            this.updateLoginStatus({isAuthenticated: true})
+            localStorage.setItem('access_token', response.data.access_token)
+            this.updateToken(response.data.access_token)
             if (this.$router.currentRoute.name !== 'Home') {
               this.$router.push({ name: 'Home' })
             }
+          }).catch(() => {
+            this.$message({message: 'Email hoặc mật khẩu không chính xác', type: 'error', center: true});
           })
+        } else {
+          return false;
         }
       });
     },
-    login() {
-      this.$router.push('/path/login')
+    register() {
+      this.$router.push('/path/register')
     }
   }
 }
@@ -110,9 +89,11 @@ export default {
   background-color: white;
   border-radius: 25px;
   box-sizing: border-box;
+  margin-bottom: 10px;
 
   .logo {
     width: 100%;
+    margin-bottom: 20px;
 
     img {
       width: 180px;
@@ -120,12 +101,12 @@ export default {
   }
 
   .inputWrap {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+
     .el-input {
-      height: 50px !important;
+      height: 45px !important;
     }
 
     .error {
@@ -136,25 +117,32 @@ export default {
   }
 
   .register {
-    margin-top: 20px;
+    margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     .el-button {
-      border: 0;
-      color: #0080dd;
-      padding: 7px;
+    color: white;
+    width: 80%;
+    height: 36px;
+    border: none;
+    background: #42b72a;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    cursor: pointer;
     }
   }
-
+  
   .btn-login {
-    margin-top: 20px;
     color: white;
     width: 100%;
     height: 36px;
     border: none;
-    background: #42b72a;
+    background: #1877f2;
     border-radius: 25px;
     font-size: 16px;
     box-sizing: border-box;
